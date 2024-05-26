@@ -1,0 +1,71 @@
+{
+    "children": [
+        {
+            "name": "desktop",
+            "type": "folder",
+            "children": [
+                {
+                    "name": "normal.exe",
+                    "onRun": "location.href='https://kijmoshi.xyz'",
+                    "type": "file"
+                },
+                {
+                    "name": "contact",
+                    "type": "folder",
+                    "children": [
+                        {
+                            "name": "discord.exe",
+                            "onRun": "location.href='https://discord.com/users/617418260484194413'",
+                            "type": "file",
+                            "content": "Šů<br>ÎYÎYÎYM„nYÉY&‡dYĚY<br>—?YĎY<br>cannot be run in DOS mode.$=YÍYÎaYbY&‡jYÔY&‡kY‡YvžfYĎYRichÎY"
+                        },
+                        {
+                            "name": "email.exe",
+                            "onRun": "location.href='mailto:dev@kijmoshi.xyz'",
+                            "type": "file",
+                            "content": "MZ      ˙˙  ¸       @  Í!This program     PE  9m[        ŕ <br>CĎ‰Mě‹ţ‹ cannot be run in DOS mode.$       Šů<br>ÎYÎYÎYM„nYÉY&‡dYĚY<br>—?YĎY<br>—=YÍYÎaYbY&‡jYÔY&‡kY‡YvžfYĎYRichÎYK0Áç‹öoĂ˙ŤČŤM‰EÔ;<br>ÇŐŤE´P./ü·ÝË52/4}¸ ¶ EĚvÚßţ"
+                        },
+                        {
+                            "name": "github.exe",
+                            "onRun": "location.href='https://github.com/real-kijmoshi'",
+                            "type": "file",
+                            "content": "MZ      ˙˙  ¸       @  Í!This program cannot be run in DOS mode.$       Šů<br>ÎYÎYÎYM„nYÉY&‡dYĚY<br>—?YĎY<br>—=YÍYÎaYbY&‡jYÔY&‡kY‡YvžfYĎYRichÎY     PE  9m[        ŕ <br>CĎ‰Mě‹ţ‹K0Áç‹öoĂ˙ŤČŤM‰EÔ;<br>ÇŐŤE´P./ü·ÝË52/4}¸ ¶ EĚvÚßţ"
+                        }
+                    ]
+                },
+                {
+                    "name": "about",
+                    "type": "folder",
+                    "children": [
+                        {
+                            "name": "me.txt",
+                            "type": "file",
+                            "content": "Hello!<br>I'm Kijmoshi, a 15 year old developer from Poland.<br>I'm mainly focused on web development, but I also have experience with javascript related technologies like React-Native or Electron.<br>My goal is to become a full-stack developer and create amazing projects.<br>Feel free to contact me via email or Discord ❤️"
+                        }
+                    ]
+                },
+                {
+                    "name": "projects",
+                    "type": "folder",
+                    "children": [
+                        {
+                            "name": "kijmoshi.xyz.txt",
+                            "type": "file",
+                            "content": "<h2>kijmoshi.xyz<h2><br>site you are currently on<br>Styled as comand line interface<br>Created with vanilla HTML, CSS and JS<br>And small backend in express.js<br>repo: <a href='https://github.com/real-kijmoshi/portfolio'"
+                        },
+                        {
+                            "name": "firebase-chat.txt",
+                            "type":"file",
+                            "content": "<h2>firebase-chat<h2><br>Simple chat application<br>Created with React.js and Firebase<br>repo: <a href='https://github.com/real-kijmoshi/Firebase-chat'"
+                        },
+                        {
+                            "name": "To be continued.txt",
+                            "type": "file",
+                            "content": "I'm currently working on new projects, stay tuned!"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
