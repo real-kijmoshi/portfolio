@@ -1,4 +1,5 @@
 const express = require('express');
+const ServerlessHttp = require('serverless-http');
 require('dotenv').config();
 
 const app = express();
@@ -11,7 +12,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
 app.get("/", (req, res) => {
-    res.sendFile(__dirname + "/public/index.html");
+    res.sendFile(__dirname + "/../public/index.html");
 });
 
 app.get("/connect", (req, res) => {
@@ -66,6 +67,4 @@ setInterval(() => {
 }, heartbeatInterval * 2);
 
 
-app.listen(process.env.PORT || 3005, () => {
-    console.log(`Server is running on port ${process.env.PORT || 3030}`);
-});
+module.exports.handler = ServerlessHttp(app);
