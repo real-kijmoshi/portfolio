@@ -1,5 +1,6 @@
 const express = require('express');
 const os = require('os');
+const path = require('path');
 const ServerlessHttp = require('serverless-http');
 const fs = require('fs');
 require('dotenv').config();
@@ -7,12 +8,11 @@ require('dotenv').config();
 const app = express();
 let heartbeatInterval = process.env.HEARTBEAT_INTERVAL || 1000;
 
-//ik this is weird but it's netlify's fault
-if(!fs.existsSync(__dirname + '/../tmp')) {
-    fs.mkdirSync(__dirname + '/../tmp');
-}
 
-const usersPath = __dirname + '/../tmp/users.json';
+const filesDirectory = path.join(process.cwd())
+const dir = `${filesDirectory}/service-data/`
+
+const usersPath = path.join(dir, 'users.json');
 
 if(!fs.existsSync(usersPath)) {
     fs.writeFileSync(usersPath, JSON.stringify({}));
