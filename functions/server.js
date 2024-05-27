@@ -1,31 +1,40 @@
 const express = require('express');
+const os = require('os');
 const ServerlessHttp = require('serverless-http');
+const fs = require('fs');
 require('dotenv').config();
 
 const app = express();
+let heartbeatInterval = process.env.HEARTBEAT_INTERVAL || 1000;
 
-const users = []
-let heartbeatInterval = 1000;
+//ik this is weird but it's netlify's fault
+if(!fs.existsSync(__dirname + '/users.json')) {
+    fs.writeFileSync(__dirname + '/users.json', JSON.stringify({}));
+}
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(express.static('public'));
+
+app.use(express.static(__dirname + '/public'));
 
 app.get("/", (req, res) => {
-    res.sendFile("/index.html")
+    res.sendFile(__dirname + '/public/index.html');
 });
 
 app.get("/connect", (req, res) => {
+    const users = require(__dirname + '/users.json');
+    console.log(`New connection`);
     let uuid;
 
     do {
         uuid = Math.random().toString(36).substring(7) + Math.random().toString(36).substring(7);
-    } while (users.includes(uuid));
+    } while (users[uuid]);
+    
 
-    users.push({
-        uuid: uuid,
+    users[uuid] = {
         lastHeartbeat: Date.now()
-    });
+    };
+
+    fs.writeFileSync(__dirname + '/users.json', JSON.stringify(users));
+    console.log(users);
 
     res.json({
         uuid: uuid,
@@ -33,10 +42,9 @@ app.get("/connect", (req, res) => {
     });
 });
 
-const os = require('os');
 app.get("/stats", (req, res) => {
     res.json({
-        users: users.length,
+        users: Object.keys(require(__dirname + '/users.json')).length,
         cpu: os.cpus()[0].times,
         memory: {
             rss: process.memoryUsage().rss
@@ -47,27 +55,37 @@ app.get("/stats", (req, res) => {
     });
 });
 
-app.post("/heartbeat", (req, res) => {
-    const user = users.find(user => user.uuid === req.body.uuid);
+app.get("/heartbeat", (req, res) => {
+    const users = require(__dirname + '/users.json');
+    const uuid = req.query.uuid;
 
-    if (user) {
-        user.lastHeartbeat = Date.now();
-        res.sendStatus(200);
+    if(!users[uuid]) {
+        res.json({success: false});
+        return;
+    }
+
+    if(users[uuid]) {
+        users[uuid].lastHeartbeat = Date.now();
+        fs.writeFileSync(__dirname + '/users.json', JSON.stringify(users));
+        res.json({success: true});
     } else {
-        res.sendStatus(404);
+        res.json({success: false});
     }
 });
 
+
 setInterval(() => {
-    users.forEach(user => {
-        if (Date.now() - user.lastHeartbeat > heartbeatInterval) {
-            users.splice(users.indexOf(user), 1);
+    const users = require(__dirname + '/users.json');
+    const now = Date.now();
+
+    Object.keys(users).forEach(uuid => {
+        if(now - users[uuid].lastHeartbeat > heartbeatInterval * 2) {
+            console.log(`Connection lost for UUID: ${uuid}`);
+            delete users[uuid];
         }
     });
-}, heartbeatInterval * 2);
 
-console.log(`Starting server`);
-console.log(`Heartbeat interval: ${heartbeatInterval}ms`);
-console.log(`Listening with serverless`);
+    fs.writeFileSync(__dirname + '/users.json', JSON.stringify(users));
+}, heartbeatInterval * 2);
 
 module.exports.handler = ServerlessHttp(app);
