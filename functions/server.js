@@ -66,5 +66,8 @@ setInterval(() => {
     });
 }, heartbeatInterval * 2);
 
+console.log(`Starting server`);
+console.log(`Heartbeat interval: ${heartbeatInterval}ms`);
+console.log(`Listening with serverless`);
 
 module.exports.handler = ServerlessHttp(app);
