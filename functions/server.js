@@ -8,8 +8,12 @@ const app = express();
 let heartbeatInterval = process.env.HEARTBEAT_INTERVAL || 1000;
 
 //ik this is weird but it's netlify's fault
-if(!fs.existsSync(__dirname + '/users.json')) {
-    fs.writeFileSync(__dirname + '/users.json', JSON.stringify({}));
+if(!fs.existsSync(__dirname + '/tmp')) {
+    fs.mkdirSync(__dirname + '/tmp');
+}
+
+if(!fs.existsSync(__dirname + '/tmp/users.json')) {
+    fs.writeFileSync(__dirname + '/tmp/users.json', JSON.stringify({}));
 }
 
 
@@ -20,7 +24,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/connect", (req, res) => {
-    const users = require(__dirname + '/users.json');
+    const users = require(__dirname + '/tmp/users.json');
     console.log(`New connection`);
     let uuid;
 
@@ -33,7 +37,7 @@ app.get("/connect", (req, res) => {
         lastHeartbeat: Date.now()
     };
 
-    fs.writeFileSync(__dirname + '/users.json', JSON.stringify(users));
+    fs.writeFileSync(__dirname + '/tmp/users.json', JSON.stringify(users));
     console.log(users);
 
     res.json({
@@ -44,7 +48,7 @@ app.get("/connect", (req, res) => {
 
 app.get("/stats", (req, res) => {
     res.json({
-        users: Object.keys(require(__dirname + '/users.json')).length,
+        users: Object.keys(require(__dirname + '/tmp/users.json')).length,
         cpu: os.cpus()[0].times,
         memory: {
             rss: process.memoryUsage().rss
@@ -56,7 +60,7 @@ app.get("/stats", (req, res) => {
 });
 
 app.get("/heartbeat", (req, res) => {
-    const users = require(__dirname + '/users.json');
+    const users = require(__dirname + '/tmp/users.json');
     const uuid = req.query.uuid;
 
     if(!users[uuid]) {
@@ -66,7 +70,7 @@ app.get("/heartbeat", (req, res) => {
 
     if(users[uuid]) {
         users[uuid].lastHeartbeat = Date.now();
-        fs.writeFileSync(__dirname + '/users.json', JSON.stringify(users));
+        fs.writeFileSync(__dirname + '/tmp/users.json', JSON.stringify(users));
         res.json({success: true});
     } else {
         res.json({success: false});
@@ -75,7 +79,7 @@ app.get("/heartbeat", (req, res) => {
 
 
 setInterval(() => {
-    const users = require(__dirname + '/users.json');
+    const users = require(__dirname + '/tmp/users.json');
     const now = Date.now();
 
     Object.keys(users).forEach(uuid => {
@@ -85,7 +89,7 @@ setInterval(() => {
         }
     });
 
-    fs.writeFileSync(__dirname + '/users.json', JSON.stringify(users));
+    fs.writeFileSync(__dirname + '/tmp/users.json', JSON.stringify(users));
 }, heartbeatInterval * 2);
 
 module.exports.handler = ServerlessHttp(app);
