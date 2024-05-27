@@ -2,21 +2,19 @@ const express = require('express');
 const os = require('os');
 const path = require('path');
 const ServerlessHttp = require('serverless-http');
-const fs = require('fs');
+const { createClient } = require('@supabase/supabase-js');
 require('dotenv').config();
 
+const supabaseUrl = 'https://qglogbhpenpyllroeoin.supabase.co'
+const supabaseKey = process.env.SUPABASE_KEY
+const supabase = createClient(supabaseUrl, supabaseKey)
 const app = express();
+
+const users = supabase.from('users')
+
+
 let heartbeatInterval = process.env.HEARTBEAT_INTERVAL || 1000;
 
-
-const filesDirectory = path.join(process.cwd())
-const dir = `${filesDirectory}/service-data/`
-
-const usersPath = path.join(dir, 'users.json');
-
-if(!fs.existsSync(usersPath)) {
-    fs.writeFileSync(usersPath, JSON.stringify({}));
-}
 
 
 app.use(express.static(__dirname + '/public'));
@@ -26,21 +24,15 @@ app.get("/", (req, res) => {
 });
 
 app.get("/connect", (req, res) => {
-    const users = require(usersPath);
-    console.log(`New connection`);
     let uuid;
 
     do {
-        uuid = Math.random().toString(36).substring(7) + Math.random().toString(36).substring(7);
-    } while (users[uuid]);
+        uuid = Math.floor(Math.random() * 1000000);
+    } while (users.fetch(uuid).length > 0);
     
 
-    users[uuid] = {
-        lastHeartbeat: Date.now()
-    };
+    users.insert({uuid: uuid, lastHeartbeat: Date.now()}).then(data => console.log(data));
 
-    fs.writeFileSync(usersPath, JSON.stringify(users));
-    console.log(users);
 
     res.json({
         uuid: uuid,
@@ -48,9 +40,9 @@ app.get("/connect", (req, res) => {
     });
 });
 
-app.get("/stats", (req, res) => {
+app.get("/stats", async (req, res) => {
     res.json({
-        users: Object.keys(require(usersPath)).length,
+        users: await users.fetch().length,
         cpu: os.cpus()[0].times,
         memory: {
             rss: process.memoryUsage().rss
@@ -62,36 +54,32 @@ app.get("/stats", (req, res) => {
 });
 
 app.get("/heartbeat", (req, res) => {
-    const users = require(usersPath);
     const uuid = req.query.uuid;
 
-    if(!users[uuid]) {
+    if(typeof uuid !== 'number') {
         res.json({success: false});
-        return;
+    } else if (uuid < 0) {
+        res.json({success: false});
     }
 
-    if(users[uuid]) {
-        users[uuid].lastHeartbeat = Date.now();
-        fs.writeFileSync(usersPath, JSON.stringify(users));
-        res.json({success: true});
-    } else {
+    if(!users.fetch(uuid)) {
         res.json({success: false});
     }
+    
+    users.update({lastHeartbeat: Date.now()}).eq('uuid', uuid).then(data => console.log(data));
 });
 
 
 setInterval(() => {
-    const users = require(usersPath);
     const now = Date.now();
 
-    Object.keys(users).forEach(uuid => {
-        if(now - users[uuid].lastHeartbeat > heartbeatInterval * 2) {
-            console.log(`Connection lost for UUID: ${uuid}`);
-            delete users[uuid];
+    users.fetch().forEach(user => {
+        if(now - user.lastHeartbeat > heartbeatInterval * 2) {
+            users.delete(user.uuid).then(data => console.log(data));
         }
     });
-
-    fs.writeFileSync(usersPath, JSON.stringify(users));
 }, heartbeatInterval * 2);
+
+
 
 module.exports.handler = ServerlessHttp(app);
