@@ -1,6 +1,12 @@
 [build]
-    command = "npm install && npm run build"
-    functions = "functions-build"
+  functions = "functions"
 
-[context.production.environment]
-  NODE_OPTIONS = "--openssl-legacy-provider"
+[dev]
+  publish = "dist"
+
+[[redirects]]
+  force = true
+  from = "/*"
+  to = "/.netlify/functions/server/:splat"
+  status = 200
+
