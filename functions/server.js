@@ -12,7 +12,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
 app.get("/", (req, res) => {
-    res.sendFile(__dirname + "/../public/index.html");
+    res.sendFile("/index.html")
 });
 
 app.get("/connect", (req, res) => {
