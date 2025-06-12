@@ -1,5 +1,7 @@
 # Personal Portfolio
 
+![preview](./screenshots/screenshot.png)
+
 A modern and interactive portfolio website built with React, Vite.
 
 ## 🚀 Features
