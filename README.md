@@ -1,47 +1,62 @@
-# Astro Starter Kit: Minimal
+# Personal Portfolio
 
-```sh
-npm create astro@latest -- --template minimal
-```
+A modern and interactive portfolio website built with React, Vite.
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/minimal)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/minimal)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/minimal/devcontainer.json)
+## 🚀 Features
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+- Modern UI/UX design
+- Smooth animations with Framer Motion
+- Responsive layout with Tailwind CSS
+- Fast and optimized performance with Vite
 
-## 🚀 Project Structure
+## 🛠️ Technologies Used
 
-Inside of your Astro project, you'll see the following folders and files:
+- React 19
+- Vite 6
+- Framer Motion
+- Tailwind CSS
+- ESLint for code quality
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
+## 📦 Installation
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+1. Clone the repository:
+   ```bash
+   git clone [your-repo-url]
+   cd porfolio
+   ```
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-Any static assets, like images, can be placed in the `public/` directory.
+3. Start the development server:
+   ```bash
+   npm run dev
+   ```
 
-## 🧞 Commands
+## 🔧 Available Scripts
 
-All commands are run from the root of the project, from a terminal:
+- `npm run dev` - Starts the development server
+- `npm run build` - Builds the app for production
+- `npm run preview` - Preview the production build locally
+- `npm run lint` - Run ESLint to check code quality
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+## 🚀 Deployment
 
-## 👀 Want to learn more?
+To deploy the application:
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+1. Build the project:
+   ```bash
+   npm run build
+   ```
+
+2. The built files will be in the `dist` directory, ready to be deployed to your hosting platform of choice.
+
+## 🤝 Contributing
+
+Contributions, issues, and feature requests are welcome! Feel free to check the issues page.
+
+## 📝 License
+
+This project is available under the MIT License.
