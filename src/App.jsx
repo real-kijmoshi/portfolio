@@ -82,7 +82,7 @@ const projects = [
     description: "My personal portfolio website showcasing my projects, skills, and experience. Built with React and Tailwind CSS, it features smooth animations, responsive design, and a clean, modern aesthetic.",
     github: "https://github.com/real-kijmoshi/portfolio",
     live: "https://kijmoshi.xyz",
-    image: "https://raw.githubusercontent.com/real-kijmoshi/portfolio/refs/heads/main/screenshots/screenshot.png",
+    image: "https://github.com/real-kijmoshi/portfolio/blob/main/screenshots/screenshot.png",
     images: [],
     techStack: [
       "React",
