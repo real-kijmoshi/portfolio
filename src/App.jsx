@@ -344,7 +344,7 @@ export default function App() {
                       <PhoneFrame image={project.images ? project.images[activeImageIndex[index]] : project.image} />
                     ) : (
                       <img 
-                        src={project.images ? project.images[activeImageIndex[index]] : project.image}
+                        src={project.images.length ? project.images[activeImageIndex[index]] : project.image}
                         alt={project.name} 
                         className="w-full h-full object-cover"
                         loading="lazy"
