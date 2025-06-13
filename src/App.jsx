@@ -6,6 +6,7 @@ const techStack = [
   {
     name: "JavaScript",
     icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg",
+    proficiency: 90
   },
   {
     name: "TypeScript",
@@ -107,9 +108,6 @@ const projects = [
       "Expo",
     ],
     challenges: "Implementing a rich text editor with custom formatting options"
-  },
-  {
-    name: "BookBle"
   }
 ];
 
