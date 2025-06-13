@@ -1,4 +1,5 @@
 import { Github, Linkedin, Twitter, Mail, ExternalLink } from "lucide-react";
+import { motion } from "framer-motion";
 import { useState } from "react";
 
 const techStack = [
