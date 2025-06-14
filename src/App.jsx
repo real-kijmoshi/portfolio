@@ -77,20 +77,26 @@ const projects = [
     challenges: "Integrating real-time data from multiple sources, optimizing map performance with hundreds of moving markers, and creating a seamless mobile-web experience. Also wroclaw api is poorly documented but I managed to make it work. Also fight (in progress) with apple to allow publishing the app on the App Store because of my age."
   },
   {
-    name: "portfolio",
-    type: "web",
-    description: "My personal portfolio website showcasing my projects, skills, and experience. Built with React and Tailwind CSS, it features smooth animations, responsive design, and a clean, modern aesthetic.",
-    github: "https://github.com/real-kijmoshi/portfolio",
-    live: "https://kijmoshi.xyz",
-    image: "https://raw.githubusercontent.com/real-kijmoshi/portfolio/refs/heads/main/screenshots/screenshot.png",
-    images: [],
-    techStack: [
-      "React",
-      "Tailwind CSS",
-      "Framer Motion",
-      "Vercel"
+    name: "Tic Tac Toe Multiplayer",
+    type: "mobile",
+    description: "A modern, multiplayer Tic Tac Toe game built with React Native and Expo. Features classic gameplay, real-time updates via WebSockets, and a responsive, mobile-first interface.",
+    github: "https://github.com/real-kijmoshi/tic-tac-toe-react-native",
+    image: "https://raw.githubusercontent.com/real-kijmoshi/tic-tac-toe-react-native/main/screenshots/1.PNG",
+    images: [
+      "https://raw.githubusercontent.com/real-kijmoshi/tic-tac-toe-react-native/main/screenshots/1.PNG",
+      "https://raw.githubusercontent.com/real-kijmoshi/tic-tac-toe-react-native/main/screenshots/2.PNG",
+      "https://raw.githubusercontent.com/real-kijmoshi/tic-tac-toe-react-native/main/screenshots/3.PNG",
+      "https://raw.githubusercontent.com/real-kijmoshi/tic-tac-toe-react-native/main/screenshots/4.PNG"
     ],
-    challenges: "Creating a visually appealing and responsive design, implementing smooth animations with Framer Motion, and ensuring cross-browser compatibility."
+    techStack: [
+      "React Native",
+      "Expo",
+      "Socket.IO",
+      "Node.js",
+      "Express.js",
+      "JavaScript"
+    ],
+    challenges: "Handling real-time multiplayer updates with Socket.IO, ensuring game state synchronization between players, and designing an intuitive UI that works well on both iOS and Android devices."
   },
   {
     name: "DreemBook",
@@ -108,6 +114,22 @@ const projects = [
       "Expo",
     ],
     challenges: "Implementing a rich text editor with custom formatting options"
+  },
+  {
+    name: "portfolio",
+    type: "web",
+    description: "My personal portfolio website showcasing my projects, skills, and experience. Built with React and Tailwind CSS, it features smooth animations, responsive design, and a clean, modern aesthetic.",
+    github: "https://github.com/real-kijmoshi/portfolio",
+    live: "https://kijmoshi.xyz",
+    image: "https://raw.githubusercontent.com/real-kijmoshi/portfolio/refs/heads/main/screenshots/screenshot.png",
+    images: [],
+    techStack: [
+      "React",
+      "Tailwind CSS",
+      "Framer Motion",
+      "Vercel"
+    ],
+    challenges: "Creating a visually appealing and responsive design, implementing smooth animations with Framer Motion, and ensuring cross-browser compatibility."
   }
 ];
 
@@ -149,7 +171,7 @@ const staggerContainer = {
 
 const PhoneFrame = ({ image }) => {
   return (
-    <div className="relative mx-auto w-64 h-[500px]">
+    <div className="relative mx-auto w-64" style={{ aspectRatio: "9/19.5" }}>
       {/* Phone frame */}
       <div className="absolute inset-0 bg-gray-900 rounded-[40px] p-2 shadow-2xl">
         {/* Screen area */}
@@ -339,7 +361,7 @@ export default function App() {
                 className={`flex flex-col ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'} gap-6 md:gap-8 bg-gray-50 rounded-xl p-4 md:p-6`}
               >
                 <div className="md:w-1/2">
-                  <div className="relative rounded-lg overflow-hidden shadow-md h-64 md:h-80 flex items-center justify-center bg-gray-100">
+                  <div className="relative rounded-lg overflow-hidden shadow-md flex items-center justify-center bg-gray-100">
                     {project.type === "mobile" ? (
                       <PhoneFrame image={project.images ? project.images[activeImageIndex[index]] : project.image} />
                     ) : (
