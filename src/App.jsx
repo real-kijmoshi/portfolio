@@ -77,6 +77,23 @@ const projects = [
     challenges: "Integrating real-time data from multiple sources, optimizing map performance with hundreds of moving markers, and creating a seamless mobile-web experience. Also wroclaw api is poorly documented but I managed to make it work. Also fight (in progress) with apple to allow publishing the app on the App Store because of my age."
   },
   {
+    name: "discord-wrapped",
+    type: "web",
+    description: "A web application that generates personalized yearly summaries for Discord users, similar to Spotify Wrapped. It analyzes user activity, message statistics, and server interactions to create visually appealing reports that users can share on social media.",
+    github: "https://github.com/real-kijmoshi/discord-wrapped",
+    live: "https://discordwrapped.netlify.app/",
+    image: "https://raw.githubusercontent.com/real-kijmoshi/discord-wrapped/refs/heads/main/screenshots/1.png",
+    images: [
+      "https://raw.githubusercontent.com/real-kijmoshi/discord-wrapped/refs/heads/main/screenshots/1.png",
+      "https://raw.githubusercontent.com/real-kijmoshi/discord-wrapped/refs/heads/main/screenshots/2.png",
+      "https://raw.githubusercontent.com/real-kijmoshi/discord-wrapped/refs/heads/main/screenshots/3.png"
+    ],
+    techStack: [
+      "React",
+    ],
+    challenges: "Processing and visualizing large datasets efficiently, ensuring user privacy and data security, and creating an engaging user interface that encourages sharing on social media. Handling large files up to 3gb of discord chat export."
+  },
+  {
     name: "portfolio",
     type: "web",
     description: "My personal portfolio website showcasing my projects, skills, and experience. Built with React and Tailwind CSS, it features smooth animations, responsive design, and a clean, modern aesthetic.",
