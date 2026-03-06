@@ -60,7 +60,7 @@ const projects = [
     type: "mobile",
     description: "A comprehensive public transport tracking system including a React Native mobile app and web interface that provides real-time location data for buses in Wrocław, Poland. Features route planning, delay notifications, and vehicle tracking.",
     github: "https://github.com/real-kijmoshi/wroclaw-mpk-map",
-    live: "http://34.70.48.19:3000/map",
+    live: "https://wroclive.kijmoshi.xyz/map",
     image: "https://raw.githubusercontent.com/real-kijmoshi/wroclaw-mpk-map/refs/heads/main/images/screen1.jpg",
     images: [
       "https://raw.githubusercontent.com/real-kijmoshi/wroclaw-mpk-map/refs/heads/main/images/screen1.jpg",
