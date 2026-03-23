@@ -489,7 +489,7 @@ export default function App() {
               <p className="text-gray-600 mb-4">
                 I'm a passionate full-stack developer with a strong focus on creating 
                 intuitive and efficient web applications. My journey in programming 
-                started when I was 15, and since then I've been constantly expanding 
+                started when I was 9, and since then I've been constantly expanding 
                 my knowledge and skills.
               </p>
               
@@ -507,7 +507,7 @@ export default function App() {
               
               <div className="flex flex-wrap gap-4">
                 <div className="bg-indigo-50 p-4 rounded-lg">
-                  <h4 className="font-semibold text-indigo-800 mb-1">5+ Years</h4>
+                  <h4 className="font-semibold text-indigo-800 mb-1">8 Years</h4>
                   <p className="text-indigo-600 text-sm">Coding Experience</p>
                 </div>
                 
