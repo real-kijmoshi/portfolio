@@ -1,686 +1,789 @@
-import { Github, Twitter, Mail, ExternalLink } from "lucide-react";
-import { useState } from "react";
-import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { motion as Motion, MotionConfig } from "framer-motion";
+import { Github, Twitter, Mail, ExternalLink, ArrowDown } from "lucide-react";
 
-const techStack = [
-  {
-    name: "JavaScript",
-    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg",
-    proficiency: 90
-  },
-  {
-    name: "TypeScript",
-    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg",
-  },
-  {
-    name: "React",
-    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
-  },
-  {
-    name: "Next.js",
-    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg",
-  },
-  {
-    name: "Node.js",
-    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg",
-  },
-  {
-    name: "Express",
-    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg",
-  },
-  {
-    name: "MongoDB",
-    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg",
-  },
-  {
-    name: "PostgreSQL",
-    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg",
-  },
-  {
-    name: "Tailwind CSS",
-    icon: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fmythinkpond.com%2Fimg%2Flogo%2Ftailwindcss-logo.png&f=1&nofb=1&ipt=c20e8d5e9a2f5367426368ca615e21c4c9f74f353194cb9692cd9359b3bf0c8b",
-  },
-  {
-    name: "React Native",
-    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
-  },
-  {
-    name: "Git",
-    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg",
-  },
-  {
-    name: "Docker",
-    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg",
-  }
-];
+/* ---------------------------------- data --------------------------------- */
 
 const projects = [
   {
+    slug: "cotozanuta",
     name: "cotozanuta.pl",
+    board: "COTOZANUTA.PL",
     type: "web",
-    description: "A music quiz game where players guess Otsochodzi song titles based on random lyrics from the songs. Features three game modes: Endless (unlimited songs), Daily (one song per day for all players), and Ranking (60-second challenge). Includes player statistics, daily history tracking, and global leaderboards.",
+    typeTag: "WWW",
+    status: "LIVE",
+    description:
+      "A music quiz where you guess Otsochodzi songs from random lyrics. Endless, daily and 60-second ranked modes, with player stats and global leaderboards.",
+    hardPart:
+      "Scraping and cleaning Genius lyrics, one shared daily game state for every player, and convincing social media to care.",
     github: "https://github.com/real-kijmoshi/cotozanuta.pl",
     live: "https://cotsozanuta.pl/",
-    image: "https://raw.githubusercontent.com/real-kijmoshi/portfolio/refs/heads/main/screenshots/cotsozanuta/1.png",
     images: [
       "https://raw.githubusercontent.com/real-kijmoshi/portfolio/refs/heads/main/screenshots/cotsozanuta/1.png",
       "https://raw.githubusercontent.com/real-kijmoshi/portfolio/refs/heads/main/screenshots/cotsozanuta/2.png",
     ],
-    techStack: [
-      "express.js",
-      "scraped geniuss lyrics",
-    ],
-    challenges: "Integrating with the Otsochodzi lyrics database, implementing real-time leaderboards, managing daily game state across multiple users, and creating an engaging quiz interface with smooth animations. and promoting the game on social media to attract players."
+    techStack: ["Express.js", "Genius lyrics (scraped)"],
   },
   {
+    slug: "wrocmap",
     name: "WrocMap",
+    board: "WROCMAP",
     type: "mobile",
-    description: "A comprehensive public transport tracking system including a React Native mobile app and web interface that provides real-time location data for buses in Wrocław, Poland. Features route planning, delay notifications, and vehicle tracking.",
+    typeTag: "APP",
+    status: "LIVE",
+    description:
+      "Real-time tracker for Wrocław's public transport — a React Native app plus a web map with live vehicle positions, routes, and delay notifications.",
+    hardPart:
+      "Hundreds of markers moving in real time, an MPK API that's barely documented, and an ongoing fight with Apple about whether I'm old enough for the App Store.",
     github: "https://github.com/real-kijmoshi/wroclaw-mpk-map",
     live: "https://wroclive.kijmoshi.xyz/map",
-    image: "https://raw.githubusercontent.com/real-kijmoshi/wroclaw-mpk-map/refs/heads/main/images/screen1.jpg",
     images: [
       "https://raw.githubusercontent.com/real-kijmoshi/wroclaw-mpk-map/refs/heads/main/images/screen1.jpg",
       "https://raw.githubusercontent.com/real-kijmoshi/wroclaw-mpk-map/refs/heads/main/images/screen2.jpg",
-      "https://raw.githubusercontent.com/real-kijmoshi/wroclaw-mpk-map/refs/heads/main/images/screen3.jpg"
+      "https://raw.githubusercontent.com/real-kijmoshi/wroclaw-mpk-map/refs/heads/main/images/screen3.jpg",
     ],
-    techStack: [
-      "React Native",
-      "Expo",
-      "Express.js",
-      "Twitter API",
-      "Wrocław MPK API (sadly)"
-    ],
-    challenges: "Integrating real-time data from multiple sources, optimizing map performance with hundreds of moving markers, and creating a seamless mobile-web experience. Also wroclaw api is poorly documented but I managed to make it work. Also fight (in progress) with apple to allow publishing the app on the App Store because of my age."
+    techStack: ["React Native", "Expo", "Express.js", "Twitter API", "Wrocław MPK API (sadly)"],
   },
   {
+    slug: "discord-wrapped",
     name: "discord-wrapped",
+    board: "DISCORD-WRAPPED",
     type: "web",
-    description: "A web application that generates personalized yearly summaries for Discord users, similar to Spotify Wrapped. It analyzes user activity, message statistics, and server interactions to create visually appealing reports that users can share on social media.",
+    typeTag: "WWW",
+    status: "LIVE",
+    description:
+      "Spotify Wrapped, but for your Discord life. Upload your data export and get a shareable yearly recap of your messages, servers, and habits.",
+    hardPart:
+      "Parsing Discord exports up to 3 GB in the browser, without ever sending anyone's messages to a server.",
     github: "https://github.com/real-kijmoshi/discord-wrapped",
     live: "https://discordwrapped.netlify.app/",
-    image: "https://raw.githubusercontent.com/real-kijmoshi/discord-wrapped/refs/heads/main/screenshots/1.png",
     images: [
       "https://raw.githubusercontent.com/real-kijmoshi/discord-wrapped/refs/heads/main/screenshots/1.png",
       "https://raw.githubusercontent.com/real-kijmoshi/discord-wrapped/refs/heads/main/screenshots/2.png",
-      "https://raw.githubusercontent.com/real-kijmoshi/discord-wrapped/refs/heads/main/screenshots/3.png"
+      "https://raw.githubusercontent.com/real-kijmoshi/discord-wrapped/refs/heads/main/screenshots/3.png",
     ],
-    techStack: [
-      "React",
-    ],
-    challenges: "Processing and visualizing large datasets efficiently, ensuring user privacy and data security, and creating an engaging user interface that encourages sharing on social media. Handling large files up to 3gb of discord chat export."
+    techStack: ["React"],
   },
   {
+    slug: "tic-tac-toe",
     name: "Tic Tac Toe Multiplayer",
+    board: "TIC-TAC-TOE",
     type: "mobile",
-    description: "A modern, multiplayer Tic Tac Toe game built with React Native and Expo. Features classic gameplay, real-time updates via WebSockets, and a responsive, mobile-first interface.",
+    typeTag: "APP",
+    status: "REPO",
+    description:
+      "Real-time multiplayer Tic Tac Toe for iOS and Android, with game rooms and live updates over WebSockets.",
+    hardPart: "Keeping game state perfectly in sync between two phones over Socket.IO.",
     github: "https://github.com/real-kijmoshi/tic-tac-toe-react-native",
-    image: "https://raw.githubusercontent.com/real-kijmoshi/tic-tac-toe-react-native/main/screenshots/1.PNG",
     images: [
       "https://raw.githubusercontent.com/real-kijmoshi/tic-tac-toe-react-native/main/screenshots/1.PNG",
       "https://raw.githubusercontent.com/real-kijmoshi/tic-tac-toe-react-native/main/screenshots/2.PNG",
       "https://raw.githubusercontent.com/real-kijmoshi/tic-tac-toe-react-native/main/screenshots/3.PNG",
-      "https://raw.githubusercontent.com/real-kijmoshi/tic-tac-toe-react-native/main/screenshots/4.PNG"
+      "https://raw.githubusercontent.com/real-kijmoshi/tic-tac-toe-react-native/main/screenshots/4.PNG",
     ],
-    techStack: [
-      "React Native",
-      "Expo",
-      "Socket.IO",
-      "Node.js",
-      "Express.js",
-      "JavaScript"
-    ],
-    challenges: "Handling real-time multiplayer updates with Socket.IO, ensuring game state synchronization between players, and designing an intuitive UI that works well on both iOS and Android devices."
+    techStack: ["React Native", "Expo", "Socket.IO", "Node.js", "Express.js"],
   },
   {
+    slug: "zypher",
     name: "zypher",
+    board: "ZYPHER",
     type: "web",
-    description: "An end-to-end encrypted terminal chat application built for private communications. Features X25519 key exchange, AES-256-GCM message encryption, forward secrecy, group chats, offline message queues, and a self-hosted server option. Includes a ghost mode for complete data deletion.",
+    typeTag: "TTY",
+    status: "LIVE",
+    description:
+      "End-to-end encrypted chat that lives in your terminal. X25519 key exchange, AES-256-GCM, forward secrecy, group chats, offline queues, self-hosting — and a ghost mode that deletes everything.",
+    hardPart: "Getting forward secrecy right, and trusting no server — including my own.",
     github: "https://github.com/real-kijmoshi/zypher",
-    image: "https://raw.githubusercontent.com/real-kijmoshi/portfolio/refs/heads/main/screenshots/other/zypher.png",
+    live: "https://zypher.kijmoshi.xyz",
     images: [
-      "https://raw.githubusercontent.com/real-kijmoshi/portfolio/refs/heads/main/screenshots/other/zypher.png"
+      "https://raw.githubusercontent.com/real-kijmoshi/portfolio/refs/heads/main/screenshots/other/zypher.png",
     ],
-    techStack: [
-      "Node.js",
-      "bcrypt"
-    ]
+    techStack: ["Node.js", "X25519", "AES-256-GCM", "bcrypt"],
   },
   {
+    slug: "dreembook",
     name: "DreemBook",
+    board: "DREEMBOOK",
     type: "mobile",
-    description: "A dream journal application made in React Native that allows users to record, categorize, and analyze their dreams. Features include mood tracking, dream pattern recognition, and a secure private journal with rich text formatting.",
+    typeTag: "APP",
+    status: "REPO",
+    description:
+      "A dream journal in your pocket — record, tag, and analyze dreams, track moods, and spot patterns over time.",
+    hardPart: "Building a rich text editor with custom formatting from scratch in React Native.",
     github: "https://github.com/real-kijmoshi/dream-book",
-    image: "https://raw.githubusercontent.com/real-kijmoshi/dream-book/refs/heads/main/screenshots/1.png",
     images: [
       "https://raw.githubusercontent.com/real-kijmoshi/dream-book/refs/heads/main/screenshots/1.png",
       "https://raw.githubusercontent.com/real-kijmoshi/dream-book/refs/heads/main/screenshots/2.png",
-      "https://raw.githubusercontent.com/real-kijmoshi/dream-book/refs/heads/main/screenshots/3.png"
+      "https://raw.githubusercontent.com/real-kijmoshi/dream-book/refs/heads/main/screenshots/3.png",
     ],
-    techStack: [
-      "React Native",
-      "Expo",
-    ],
-    challenges: "Implementing a rich text editor with custom formatting options"
+    techStack: ["React Native", "Expo"],
   },
   {
+    slug: "portfolio",
     name: "portfolio",
-    type: "web",
-    description: "My personal portfolio website showcasing my projects, skills, and experience. Built with React and Tailwind CSS, it features smooth animations, responsive design, and a clean, modern aesthetic.",
+    board: "PORTFOLIO",
+    type: "here",
+    typeTag: "WWW",
+    status: "HERE",
+    description:
+      "This site. A Polish bus stop for my projects: printed timetable, amber departure board, no delays expected.",
+    hardPart: "Resisting the urge to redesign it every month. (Ongoing.)",
     github: "https://github.com/real-kijmoshi/portfolio",
     live: "https://kijmoshi.xyz",
-    image: "https://raw.githubusercontent.com/real-kijmoshi/portfolio/refs/heads/main/screenshots/screenshot.png",
     images: [],
-    techStack: [
-      "React",
-      "Tailwind CSS",
-      "Framer Motion",
-      "Vercel"
-    ],
-    challenges: "Creating a visually appealing and responsive design, implementing smooth animations with Framer Motion, and ensuring cross-browser compatibility."
+    techStack: ["React", "Tailwind CSS", "Framer Motion"],
   },
+];
+
+const stackGroups = [
+  { en: "FRONTEND", items: ["JavaScript", "TypeScript", "React", "Next.js", "Tailwind CSS"] },
+  { en: "BACKEND", items: ["Node.js", "Express", "MongoDB", "PostgreSQL"] },
+  { en: "MOBILE", items: ["React Native", "Expo"] },
+  { en: "TOOLS", items: ["Git", "Docker"] },
 ];
 
 const socialLinks = [
-  {
-    name: "GitHub",
-    url: "https://github.com/real-kijmoshi",
-    icon: <Github size={24} />,
-    color: "hover:text-gray-900"
-  },
-  {
-    name: "Twitter",
-    url: "https://twitter.com/kijmoshi_dev",
-    icon: <Twitter size={24} />,
-    color: "hover:text-blue-400"
-  },
-  {
-    name: "Email",
-    url: "mailto:dev@kijmoshi.xyz",
-    icon: <Mail size={24} />,
-    color: "hover:text-red-500"
-  }
+  { name: "GitHub", url: "https://github.com/real-kijmoshi", icon: Github },
+  { name: "Twitter", url: "https://twitter.com/kijmoshi_dev", icon: Twitter },
+  { name: "Email", url: "mailto:dev@kijmoshi.xyz", icon: Mail },
 ];
 
-const fadeIn = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0 }
+/* --------------------------------- motion -------------------------------- */
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 18 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
 };
 
-const staggerContainer = {
+const stagger = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.08 } },
+};
+
+const ledRow = {
   hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1
-    }
-  }
+  visible: { opacity: 1, transition: { duration: 0.12 } },
 };
 
-const PhoneFrame = ({ image }) => {
+/* --------------------------------- helpers ------------------------------- */
+
+function scrollToId(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  el.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+}
+
+function getWarsawTime() {
+  const formatted = new Intl.DateTimeFormat("en-GB", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+    timeZone: "Europe/Warsaw",
+  }).format(new Date());
+  const [hh, mm] = formatted.split(":");
+  return { hh, mm };
+}
+
+function useWarsawTime() {
+  const [time, setTime] = useState(getWarsawTime);
+  useEffect(() => {
+    const timer = setInterval(() => setTime(getWarsawTime()), 1000);
+    return () => clearInterval(timer);
+  }, []);
+  return time;
+}
+
+/* ------------------------------- components ------------------------------ */
+
+function SectionHeader({ en, title }) {
   return (
-    <div className="relative mx-auto w-64" style={{ aspectRatio: "9/19.5" }}>
-      {/* Phone frame */}
-      <div className="absolute inset-0 bg-gray-900 rounded-[40px] p-2 shadow-2xl">
-        {/* Screen area */}
-        <div className="relative h-full w-full bg-black rounded-[32px] overflow-hidden">
-          {/* Camera notch */}
-          <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-1/3 h-6 bg-gray-900 rounded-b-xl z-10"></div>
-          {/* Screen content */}
-          <img 
-            src={image} 
-            alt="App screenshot" 
-            className="w-full h-full object-cover"
-          />
+    <Motion.div variants={fadeUp} className="mb-10">
+      <div className="flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.25em] text-ink-soft">
+        <span className="h-2.5 w-2.5 border border-ink bg-amber" aria-hidden="true" />
+        <span>{en}</span>
+        <span className="h-px flex-1 bg-rule" aria-hidden="true" />
+      </div>
+      <h2 className="mt-3 font-stretch-expanded text-4xl font-black uppercase tracking-tight md:text-5xl">
+        {title}
+      </h2>
+    </Motion.div>
+  );
+}
+
+function StatusBadge({ status }) {
+  const styles = {
+    LIVE: "bg-amber text-ink",
+    REPO: "bg-transparent text-ink",
+    HERE: "bg-cobalt text-paper",
+  };
+  return (
+    <span
+      className={`border-2 border-ink px-2 py-0.5 font-mono text-[11px] font-semibold tracking-widest ${styles[status]}`}
+    >
+      {status}
+    </span>
+  );
+}
+
+function DepartureBoard() {
+  const { hh, mm } = useWarsawTime();
+
+  return (
+    <Motion.div
+      variants={fadeUp}
+      className="relative overflow-hidden rounded-lg border-4 border-ink bg-board shadow-[8px_8px_0_0_var(--color-ink)]"
+    >
+      <div className="relative p-4 sm:p-5">
+        {/* header */}
+        <div className="flex items-baseline justify-between gap-4 border-b border-board-edge pb-3 font-led text-amber led-glow">
+          <span className="text-sm tracking-widest sm:text-base">DEPARTURES</span>
+          <span className="text-sm tracking-widest sm:text-base" aria-label={`Local time in Wrocław ${hh}:${mm}`}>
+            {hh}
+            <span className="animate-blink">:</span>
+            {mm}
+          </span>
+        </div>
+
+        {/* column labels */}
+        <div className="grid grid-cols-[2.75rem_1fr_2.75rem_3.5rem] gap-2 py-2 font-led text-[10px] tracking-widest text-amber/40 sm:text-xs">
+          <span>NO</span>
+          <span>DESTINATION</span>
+          <span>TYPE</span>
+          <span className="text-right">STATUS</span>
+        </div>
+
+        {/* rows */}
+        <Motion.ul variants={stagger} initial="hidden" animate="visible" className="flex flex-col">
+          {projects.map((project, i) => (
+            <Motion.li key={project.slug} variants={ledRow}>
+              <button
+                type="button"
+                onClick={() => scrollToId(project.slug)}
+                aria-label={`Go to project ${project.name}`}
+                className="group grid w-full grid-cols-[2.75rem_1fr_2.75rem_3.5rem] items-center gap-2 py-1.5 text-left font-led text-sm text-amber led-glow transition-colors hover:bg-amber/10 focus-visible:bg-amber/10 sm:text-base"
+              >
+                <span className="text-amber/60">{String(i + 1).padStart(2, "0")}</span>
+                <span className="truncate group-hover:underline group-hover:underline-offset-4">
+                  {project.board}
+                </span>
+                <span className="text-amber/60">{project.typeTag}</span>
+                <span className="flex items-center justify-end gap-1.5 text-right">
+                  {project.status === "LIVE" && (
+                    <span className="h-1.5 w-1.5 animate-blink rounded-full bg-amber" aria-hidden="true" />
+                  )}
+                  {project.status}
+                </span>
+              </button>
+            </Motion.li>
+          ))}
+        </Motion.ul>
+
+        {/* marquee footer */}
+        <div className="mt-3 overflow-hidden border-t border-board-edge pt-3" aria-hidden="true">
+          <div className="animate-marquee flex w-max whitespace-nowrap font-led text-xs tracking-widest text-amber/70">
+            {[0, 1].map((n) => (
+              <span key={n} className="pr-4">
+                WELCOME · ALL PROJECTS DEPART ON TIME · BUILT IN WROCŁAW · NEXT DEPARTURE: IN
+                DEVELOPMENT ·&nbsp;
+              </span>
+            ))}
+          </div>
         </div>
       </div>
-      {/* Home button */}
-      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-gray-700 rounded-full"></div>
-    </div>
+
+      <div className="scanlines pointer-events-none absolute inset-0" aria-hidden="true" />
+    </Motion.div>
   );
-};
+}
 
-export default function App() {
-  const [activeImageIndex, setActiveImageIndex] = useState(projects.map(() => 0));
-
-  const handleImageChange = (projectIndex, imageIndex) => {
-    setActiveImageIndex((prev) => {
-      const newActiveImages = [...prev];
-      newActiveImages[projectIndex] = imageIndex;
-      return newActiveImages;
-    });
-  };
-  
-
+function PhoneFrame({ image, alt }) {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4 md:p-8 font-sans scroll-smooth">
-      <style jsx global>{`
-        html {
-          scroll-behavior: smooth;
-        }
-      `}</style>
-      
-      <div className="max-w-6xl mx-auto">
-        {/* Hero Section */}
-        <motion.section 
-          initial="hidden"
-          animate="visible"
-          variants={staggerContainer}
-          className="bg-white rounded-2xl shadow-xl p-6 md:p-8 mb-8 overflow-hidden relative"
-        >
-          <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-100 rounded-bl-full opacity-20"></div>
-          <div className="absolute bottom-0 left-0 w-32 h-32 bg-indigo-100 rounded-tr-full opacity-20"></div>
-          
-          <motion.div variants={fadeIn} className="relative z-10">
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-2">
-              kijmoshi
-            </h1>
-            <motion.span 
-              variants={fadeIn}
-              className="text-xl md:text-2xl bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent font-semibold mb-4 block"
-            >
-              Full Stack Developer & JavaScript Enthusiast
-            </motion.span>
-            
-            <motion.p 
-              variants={fadeIn}
-              className="text-gray-700 leading-relaxed mb-6 max-w-3xl text-lg"
-            >
-              I build exceptional digital experiences with modern web technologies. 
-              With 5+ years of experience in JavaScript ecosystem, I specialize in 
-              creating performant, accessible, and visually appealing applications. 
-              When I'm not coding, you'll find me bouldering.
-            </motion.p>
-            
-            <motion.div 
-              variants={fadeIn}
-              className="flex flex-wrap gap-4 mb-6"
-            >
-              {socialLinks.map((social) => (
-                <a
-                  key={social.name}
-                  href={social.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`flex items-center gap-2 text-gray-600 ${social.color} transition-colors duration-200 p-2 rounded-lg hover:bg-gray-50`}
-                  aria-label={social.name}
-                >
-                  {social.icon}
-                  <span className="hidden sm:inline">{social.name}</span>
-                </a>
-              ))}
-            </motion.div>
-            
-            <motion.div 
-              variants={fadeIn}
-              className="flex flex-wrap gap-3"
-            >
-              <a
-                href="#projects"
-                className="px-6 py-3 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 transition-colors duration-200 shadow-md hover:shadow-lg"
-              >
-                View My Work
-              </a>
-              <a
-                href="#contact"
-                className="px-6 py-3 border border-indigo-600 text-indigo-600 rounded-lg font-medium hover:bg-indigo-50 transition-colors duration-200"
-              >
-                Contact Me
-              </a>
-            </motion.div>
-          </motion.div>
-        </motion.section>
-
-        {/* Tech Stack Section */}
-        <motion.section 
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          variants={staggerContainer}
-          className="bg-white rounded-2xl shadow-xl p-6 md:p-8 mb-8"
-        >
-          <motion.h2 
-            variants={fadeIn}
-            className="text-3xl font-semibold text-gray-800 mb-6"
-          >
-            My Tech Stack
-          </motion.h2>
-          
-          <motion.p 
-            variants={fadeIn}
-            className="text-gray-600 mb-8 max-w-3xl"
-          >
-            I've worked with a wide range of technologies in the web development world.
-            Here are the tools I'm most proficient with:
-          </motion.p>
-
-          <motion.div 
-            variants={staggerContainer}
-            className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4"
-          >
-            {techStack.map((tech) => (
-              <motion.div 
-                key={tech.name}
-                variants={fadeIn}
-                whileHover={{ y: -5 }}
-                className="flex flex items-center justify-center bg-white rounded-lg shadow-sm p-4 transition-transform duration-200 hover:shadow-md"
-              >
-                <img
-                  src={tech.icon}
-                  alt={tech.name}
-                  className="w-10 h-10"
-                  loading="lazy"
-                />
-                <span className="ml-3 text-gray-700 font-medium">{tech.name}</span>
-              </motion.div>
-            ))}
-          </motion.div>
-        </motion.section>
-
-        {/* Projects Section */}
-        <motion.section 
-          id="projects"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          variants={staggerContainer}
-          className="bg-white rounded-2xl shadow-xl p-6 md:p-8 mb-8"
-        >
-          <motion.h2 
-            variants={fadeIn}
-            className="text-3xl font-semibold text-gray-800 mb-6"
-          >
-            Featured Projects
-          </motion.h2>
-          
-          <motion.p 
-            variants={fadeIn}
-            className="text-gray-600 mb-8 max-w-3xl"
-          >
-            Here are some of my proudest creations. Each project represents unique challenges
-            and innovative solutions.
-          </motion.p>
-
-          <div className="flex flex-col gap-8">
-            {projects.map((project, index) => (
-              <motion.div 
-                key={project.name}
-                variants={fadeIn}
-                className={`flex flex-col ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'} gap-6 md:gap-8 bg-gray-50 rounded-xl p-4 md:p-6`}
-              >
-                <div className="md:w-1/2">
-                  <div className="relative rounded-lg overflow-hidden shadow-md flex items-center justify-center bg-gray-100">
-                    {project.type === "mobile" ? (
-                      <PhoneFrame image={project.images ? project.images[activeImageIndex[index]] : project.image} />
-                    ) : (
-                      <img 
-                        src={project.images.length ? project.images[activeImageIndex[index]] : project.image}
-                        alt={project.name} 
-                        className="w-full h-full object-cover"
-                        loading="lazy"
-                      />
-                    )}
-                    {project.images && (
-                      <div className="absolute bottom-0 left-0 right-0 flex justify-center gap-2 p-2">
-                        {project.images.map((img, imgIndex) => (
-                          <button
-                            key={imgIndex}
-                            onClick={() => handleImageChange(index, imgIndex)}
-                            className={`w-8 h-8 rounded-full border-2 ${activeImageIndex[index] === imgIndex ? 'border-indigo-600' : 'border-gray-300'} transition-colors duration-200 hover:border-indigo-500`
-                            }
-                            aria-label={`View image ${imgIndex + 1} of ${project.name}`}
-                            title={`View image ${imgIndex + 1} of ${project.name}`}
-                            style={{ backgroundColor: activeImageIndex[index] === imgIndex ? 'rgba(99, 102, 241, 0.1)' : 'transparent' }}
-                          >
-                            <img 
-                              src={img} 
-                              alt="" 
-                              className="w-full h-full object-cover rounded-full"
-                            />
-                          </button>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </div>
-                
-                <div className="md:w-1/2">
-                  <h3 className="text-2xl font-bold text-gray-800 mb-2">{project.name}</h3>
-                  <p className="text-gray-600 mb-4">{project.description}</p>
-                  
-                  {project.challenges && (
-                    <div className="mb-4">
-                      <h4 className="font-semibold text-gray-700 mb-1">Key Challenges:</h4>
-                      <p className="text-gray-600 text-sm">{project.challenges}</p>
-                    </div>
-                  )}
-                  
-                  <div className="mb-4">
-                    <h4 className="font-semibold text-gray-700 mb-2">Technologies Used:</h4>
-                    <div className="flex flex-wrap gap-2">
-                      {project.techStack.map((tech) => (
-                        <span 
-                          key={tech} 
-                          className="px-3 py-1 bg-indigo-100 text-indigo-800 text-xs font-medium rounded-full"
-                        >
-                          {tech}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                  
-                  <div className="flex flex-wrap gap-3 mt-6">
-                    <a
-                      href={project.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-2 px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-900 transition-colors duration-200"
-                    >
-                      <Github size={18} />
-                      View Code
-                    </a>
-                    {project.live && (
-                      <a
-                        href={project.live}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-2 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors duration-200"
-                      >
-                        <ExternalLink size={18} />
-                        Live Demo
-                      </a>
-                    )}
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </motion.section>
-
-        {/* About Section */}
-        <motion.section 
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          variants={staggerContainer}
-          className="bg-white rounded-2xl shadow-xl p-6 md:p-8 mb-8"
-        >
-          <motion.h2 
-            variants={fadeIn}
-            className="text-3xl font-semibold text-gray-800 mb-6"
-          >
-            About Me
-          </motion.h2>
-          
-          <div className="grid md:grid-cols-3 gap-8">
-            <motion.div 
-              variants={fadeIn}
-              className="md:col-span-2"
-            >
-              <p className="text-gray-600 mb-4">
-                I'm a passionate full-stack developer with a strong focus on creating 
-                intuitive and efficient web applications. My journey in programming 
-                started when I was 9, and since then I've been constantly expanding 
-                my knowledge and skills.
-              </p>
-              
-              <p className="text-gray-600 mb-4">
-                What drives me is the ability to solve complex problems with elegant 
-                solutions. I believe in writing clean, maintainable code and following 
-                best practices to ensure scalability and performance.
-              </p>
-              
-              <p className="text-gray-600 mb-6">
-                When I'm not coding, you can find me at the climbing gym working on 
-                bouldering problems, which I find surprisingly similar to debugging 
-                complex code - both require patience, persistence, and creative thinking.
-              </p>
-              
-              <div className="flex flex-wrap gap-4">
-                <div className="bg-indigo-50 p-4 rounded-lg">
-                  <h4 className="font-semibold text-indigo-800 mb-1">8 Years</h4>
-                  <p className="text-indigo-600 text-sm">Coding Experience</p>
-                </div>
-                
-                <div className="bg-indigo-50 p-4 rounded-lg">
-                  <h4 className="font-semibold text-indigo-800 mb-1">10+ Projects</h4>
-                  <p className="text-indigo-600 text-sm">Completed</p>
-                </div>
-                
-                <div className="bg-indigo-50 p-4 rounded-lg">
-                  <h4 className="font-semibold text-indigo-800 mb-1">Continuous</h4>
-                  <p className="text-indigo-600 text-sm">Learning & Growth</p>
-                </div>
-              </div>
-            </motion.div>
-            
-            <motion.div 
-              variants={fadeIn}
-              className="flex flex-col items-center"
-            >
-              <div className="w-48 h-48 md:w-64 md:h-64 rounded-full overflow-hidden border-4 border-indigo-100 mb-4">
-                <img 
-                  src="/image.jpg"
-                  alt="Kijmoshi" 
-                  className="w-full h-full object-cover"
-                  loading="lazy"
-                />
-              </div>
-              <div className="text-center">
-                <h4 className="font-semibold text-gray-800">kijmoshi</h4>
-                <p className="text-gray-600 text-sm">Full Stack Developer</p>
-              </div>
-            </motion.div>
-          </div>
-        </motion.section>
-
-        {/* Contact Section */}
-        <motion.section 
-          id="contact"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          variants={staggerContainer}
-          className="bg-white rounded-2xl shadow-xl p-6 md:p-8 mb-8"
-        >
-          <motion.h2 
-            variants={fadeIn}
-            className="text-3xl font-semibold text-gray-800 mb-6"
-          >
-            Get In Touch
-          </motion.h2>
-          
-          <div className="grid md:grid-cols-2 gap-8">
-            <motion.div 
-              variants={fadeIn}
-            >
-              <p className="text-gray-600 mb-6">
-                Have a project in mind or want to discuss potential opportunities? 
-                I'm always open to interesting collaborations and conversations.
-              </p>
-              
-              <div className="space-y-4">
-                <div className="flex items-center gap-4">
-                  <Mail className="text-indigo-600" size={24} />
-                  <div>
-                    <h4 className="font-medium text-gray-700">Email</h4>
-                    <a href="mailto:dev@kijmoshi.xyz" className="text-indigo-600 hover:underline">
-                      dev@kijmoshi.xyz
-                    </a>
-                  </div>
-                </div>
-                
-                <div className="flex items-center gap-4">
-                  <Github className="text-indigo-600" size={24} />
-                  <div>
-                    <h4 className="font-medium text-gray-700">GitHub</h4>
-                    <a 
-                      href="https://github.com/real-kijmoshi" 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="text-indigo-600 hover:underline"
-                    >
-                      github.com/real-kijmoshi
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-            
-            <motion.form 
-              variants={fadeIn}
-              className="space-y-4"
-              method="POST"
-              action="https://formspree.io/f/xyzjwnog"
-            >
-              <div>
-                <label htmlFor="name" className="block text-gray-700 mb-1">Name</label>
-                <input 
-                  type="text" 
-                  id="name" 
-                  name="name"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
-                  placeholder="Your name"
-                />
-              </div>
-              
-              <div>
-                <label htmlFor="email" className="block text-gray-700 mb-1">Email</label>
-                <input 
-                  type="email" 
-                  id="email" 
-                  name="email"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
-                  placeholder="your.email@example.com"
-                />
-              </div>
-              
-              <div>
-                <label htmlFor="message" className="block text-gray-700 mb-1">Message</label>
-                <textarea 
-                  id="message" 
-                  name="message"
-                  rows={4}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
-                  placeholder="Your message here..."
-                ></textarea>
-              </div>
-              
-              <button 
-                type="submit"
-                className="px-6 py-3 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 transition-colors duration-200 shadow-md hover:shadow-lg w-full"
-              >
-                Send Message
-              </button>
-            </motion.form>
-          </div>
-        </motion.section>
-
-        <footer className="text-center text-gray-500 text-sm py-6">
-          <p>© {new Date().getFullYear()} kijmoshi. All rights reserved.</p>
-          <p className="mt-1">Built with React, Tailwind CSS, and Framer Motion</p>
-        </footer>
+    <div className="relative mx-auto w-44 rounded-[2.2rem] border-[6px] border-ink bg-ink shadow-[6px_6px_0_0_var(--color-rule)] sm:w-52">
+      <div className="absolute left-1/2 top-2 z-10 h-4 w-20 -translate-x-1/2 rounded-full bg-ink" aria-hidden="true" />
+      <div className="aspect-[9/19] overflow-hidden rounded-[1.7rem] bg-board">
+        <img src={image} alt={alt} className="h-full w-full object-cover" loading="lazy" />
       </div>
     </div>
+  );
+}
+
+function YouAreHere() {
+  return (
+    <div className="flex aspect-[16/10] flex-col items-center justify-center gap-3 border-2 border-ink bg-panel shadow-[6px_6px_0_0_var(--color-ink)]">
+      <span className="relative flex h-16 w-16 items-center justify-center rounded-full border-4 border-ink bg-amber">
+        <span className="h-3 w-3 rounded-full bg-ink" />
+      </span>
+      <p className="font-stretch-expanded text-2xl font-black uppercase tracking-tight sm:text-3xl">
+        You are here
+      </p>
+    </div>
+  );
+}
+
+function ProjectMedia({ project }) {
+  const [active, setActive] = useState(0);
+  const { images, name, type } = project;
+
+  if (type === "here") return <YouAreHere />;
+
+  return (
+    <div>
+      {type === "mobile" ? (
+        <PhoneFrame image={images[active]} alt={`${name} screenshot ${active + 1}`} />
+      ) : (
+        <div className="overflow-hidden border-2 border-ink bg-panel shadow-[6px_6px_0_0_var(--color-ink)]">
+          <img
+            src={images[active]}
+            alt={`${name} screenshot ${active + 1}`}
+            className="aspect-[16/10] w-full object-cover object-top"
+            loading="lazy"
+          />
+        </div>
+      )}
+
+      {images.length > 1 && (
+        <div className="mt-4 flex justify-center gap-2 md:justify-start">
+          {images.map((img, i) => (
+            <button
+              key={img}
+              type="button"
+              onClick={() => setActive(i)}
+              aria-label={`View screenshot ${i + 1} of ${name}`}
+              className={`h-11 w-14 overflow-hidden border-2 transition-colors ${
+                active === i ? "border-cobalt" : "border-rule hover:border-ink"
+              }`}
+            >
+              <img src={img} alt="" className="h-full w-full object-cover object-top" loading="lazy" />
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function ProjectStop({ project, index }) {
+  return (
+    <Motion.li
+      variants={fadeUp}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: "-80px" }}
+      id={project.slug}
+      className="relative scroll-mt-28 pb-16 pl-10 last:pb-0 sm:pl-14"
+    >
+      {/* stop dot on the route line */}
+      <span
+        className="absolute left-0 top-1.5 h-4 w-4 -translate-x-[7px] rounded-full border-[3px] border-ink bg-amber sm:-translate-x-[7px]"
+        aria-hidden="true"
+      />
+
+      {/* stop header */}
+      <div className="mb-6 flex flex-wrap items-center gap-3">
+        <span className="border-2 border-ink px-1.5 py-0.5 font-mono text-sm font-semibold">
+          {String(index + 1).padStart(2, "0")}
+        </span>
+        <h3 className="font-stretch-expanded text-2xl font-extrabold uppercase tracking-tight sm:text-3xl">
+          {project.name}
+        </h3>
+        <span className="font-mono text-xs tracking-[0.25em] text-ink-soft">{project.typeTag}</span>
+        <StatusBadge status={project.status} />
+      </div>
+
+      <div className="grid items-start gap-8 md:grid-cols-2 md:gap-10">
+        <ProjectMedia project={project} />
+
+        <div>
+          <p className="leading-relaxed text-ink">{project.description}</p>
+
+          {project.hardPart && (
+            <div className="mt-5 border-l-4 border-amber pl-4">
+              <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-ink-soft">
+                The hard part
+              </p>
+              <p className="mt-1.5 text-sm leading-relaxed text-ink-soft">{project.hardPart}</p>
+            </div>
+          )}
+
+          <div className="mt-5 flex flex-wrap gap-2">
+            {project.techStack.map((tech) => (
+              <span
+                key={tech}
+                className="border border-ink-soft/40 px-2.5 py-1 font-mono text-xs text-ink-soft"
+              >
+                {tech}
+              </span>
+            ))}
+          </div>
+
+          <div className="mt-6 flex flex-wrap gap-3">
+            <a
+              href={project.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 border-2 border-ink bg-ink px-4 py-2 font-mono text-xs font-semibold uppercase tracking-widest text-paper transition-colors hover:bg-cobalt hover:border-cobalt"
+            >
+              <Github size={15} />
+              Code
+            </a>
+            {project.live && (
+              <a
+                href={project.live}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 border-2 border-ink px-4 py-2 font-mono text-xs font-semibold uppercase tracking-widest text-ink transition-colors hover:bg-amber"
+              >
+                <ExternalLink size={15} />
+                Live
+              </a>
+            )}
+          </div>
+        </div>
+      </div>
+    </Motion.li>
+  );
+}
+
+function TicketStat({ big, label }) {
+  return (
+    <div className="border-2 border-dashed border-ink px-5 py-4">
+      <p className="font-stretch-expanded text-2xl font-black uppercase">{big}</p>
+      <p className="mt-1 font-mono text-[11px] uppercase tracking-[0.2em] text-ink-soft">{label}</p>
+    </div>
+  );
+}
+
+/* ---------------------------------- app ---------------------------------- */
+
+export default function App() {
+  const year = new Date().getFullYear();
+
+  return (
+    <MotionConfig reducedMotion="user">
+      <div className="min-h-screen bg-paper font-sans text-ink">
+        {/* top bar */}
+        <header className="sticky top-0 z-50 border-b-2 border-ink bg-paper/90 backdrop-blur">
+          <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6">
+            <a href="#top" className="flex items-center gap-2.5">
+              <span className="h-3.5 w-3.5 border-2 border-ink bg-amber" aria-hidden="true" />
+              <span className="font-stretch-expanded text-lg font-black uppercase tracking-tight">
+                kijmoshi.xyz
+              </span>
+            </a>
+            <nav className="hidden gap-6 font-mono text-xs uppercase tracking-[0.2em] sm:flex">
+              {[
+                ["projects", "Projects"],
+                ["stack", "Stack"],
+                ["about", "About"],
+                ["contact", "Contact"],
+              ].map(([id, label]) => (
+                <a key={id} href={`#${id}`} className="text-ink-soft transition-colors hover:text-cobalt">
+                  {label}
+                </a>
+              ))}
+            </nav>
+          </div>
+        </header>
+
+        <main id="top" className="mx-auto max-w-6xl px-4 sm:px-6">
+          {/* hero */}
+          <Motion.section
+            initial="hidden"
+            animate="visible"
+            variants={stagger}
+            className="py-14 md:py-20"
+          >
+            <Motion.p
+              variants={fadeUp}
+              className="font-mono text-[11px] uppercase tracking-[0.25em] text-ink-soft"
+            >
+              Stop · Wrocław, Poland
+            </Motion.p>
+
+            <Motion.h1
+              variants={fadeUp}
+              className="mt-4 font-stretch-expanded text-6xl font-black uppercase leading-[0.95] tracking-tight sm:text-7xl lg:text-[6.5rem]"
+            >
+              Kij&shy;moshi
+            </Motion.h1>
+
+            <div className="mt-10 grid items-start gap-10 lg:grid-cols-[1.1fr_1fr] lg:gap-14">
+              <div>
+                <Motion.p variants={fadeUp} className="max-w-xl text-lg font-medium">
+                  Full-stack developer. Building live things with JavaScript since age 9.
+                </Motion.p>
+
+                <Motion.p variants={fadeUp} className="mt-4 max-w-xl leading-relaxed text-ink-soft">
+                  Transit trackers, music quizzes, encrypted terminal chat — I like software that's
+                  moving while you look at it. Currently arguing with Apple about whether I'm old enough
+                  for the App Store. When I'm not shipping, I'm bouldering.
+                </Motion.p>
+
+                <Motion.div variants={fadeUp} className="mt-8 flex flex-wrap items-center gap-4">
+                  <button
+                    type="button"
+                    onClick={() => scrollToId("projects")}
+                    className="flex items-center gap-2 border-2 border-ink bg-ink px-5 py-2.5 font-mono text-xs font-semibold uppercase tracking-widest text-amber transition-colors hover:bg-cobalt hover:text-paper hover:border-cobalt"
+                  >
+                    <ArrowDown size={15} />
+                    View route
+                  </button>
+
+                  <div className="flex gap-1">
+                    {socialLinks.map((social) => {
+                      const Icon = social.icon;
+                      return (
+                        <a
+                          key={social.name}
+                          href={social.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          aria-label={social.name}
+                          className="flex h-10 w-10 items-center justify-center border-2 border-transparent text-ink-soft transition-colors hover:border-ink hover:text-ink"
+                        >
+                          <Icon size={19} />
+                        </a>
+                      );
+                    })}
+                  </div>
+                </Motion.div>
+              </div>
+
+              <DepartureBoard />
+            </div>
+          </Motion.section>
+
+          {/* projects */}
+          <Motion.section
+            id="projects"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-80px" }}
+            variants={stagger}
+            className="scroll-mt-24 border-t-2 border-ink py-16 md:py-20"
+          >
+            <SectionHeader en="Route" title="Projects" />
+
+            <ol className="relative ml-2 border-l-2 border-ink sm:ml-4">
+              {projects.map((project, index) => (
+                <ProjectStop key={project.slug} project={project} index={index} />
+              ))}
+            </ol>
+          </Motion.section>
+
+          {/* stack */}
+          <Motion.section
+            id="stack"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-80px" }}
+            variants={stagger}
+            className="scroll-mt-24 border-t-2 border-ink py-16 md:py-20"
+          >
+            <SectionHeader en="Fleet" title="Tech stack" />
+
+            <div className="border-t border-rule">
+              {stackGroups.map((group) => (
+                <Motion.div
+                  key={group.en}
+                  variants={fadeUp}
+                  className="flex flex-col gap-3 border-b border-rule py-5 sm:flex-row sm:items-baseline"
+                >
+                  <p className="w-44 shrink-0 font-mono text-[11px] uppercase tracking-[0.25em] text-ink-soft">
+                    {group.en}
+                  </p>
+                  <div className="flex flex-wrap gap-x-6 gap-y-2">
+                    {group.items.map((item) => (
+                      <span key={item} className="font-stretch-expanded font-bold uppercase tracking-tight">
+                        {item}
+                      </span>
+                    ))}
+                  </div>
+                </Motion.div>
+              ))}
+            </div>
+          </Motion.section>
+
+          {/* about */}
+          <Motion.section
+            id="about"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-80px" }}
+            variants={stagger}
+            className="scroll-mt-24 border-t-2 border-ink py-16 md:py-20"
+          >
+            <SectionHeader en="Driver" title="About me" />
+
+            <div className="grid gap-10 md:grid-cols-[auto_1fr] md:gap-14">
+              <Motion.div variants={fadeUp} className="mx-auto md:mx-0">
+                <div className="w-52 overflow-hidden border-2 border-ink shadow-[6px_6px_0_0_var(--color-amber)] sm:w-60">
+                  <img src="/image.jpg" alt="kijmoshi" className="aspect-square w-full object-cover" loading="lazy" />
+                </div>
+                <p className="mt-3 text-center font-mono text-[11px] uppercase tracking-[0.25em] text-ink-soft md:text-left">
+                  kijmoshi · full-stack
+                </p>
+              </Motion.div>
+
+              <Motion.div variants={fadeUp}>
+                <p className="max-w-2xl leading-relaxed">
+                  I wrote my first line of code at 9 and never really stopped. What keeps me hooked is
+                  turning messy real-world problems — a chaotic transit API, a 3&nbsp;GB chat export —
+                  into things people actually use. I care about clean, maintainable code, but I care more
+                  about shipping it.
+                </p>
+                <p className="mt-4 max-w-2xl leading-relaxed text-ink-soft">
+                  Away from the keyboard I'm at the climbing gym. Bouldering is basically debugging:
+                  patience, persistence, and the occasional fall.
+                </p>
+
+                <div className="mt-8 flex flex-wrap gap-4">
+                  <TicketStat big="8 years" label="coding" />
+                  <TicketStat big="Age 9" label="first line of code" />
+                  <TicketStat big="10+" label="projects shipped" />
+                </div>
+              </Motion.div>
+            </div>
+          </Motion.section>
+
+          {/* contact */}
+          <Motion.section
+            id="contact"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-80px" }}
+            variants={stagger}
+            className="scroll-mt-24 border-t-2 border-ink py-16 md:py-20"
+          >
+            <SectionHeader en="Contact" title="Get in touch" />
+
+            <div className="grid gap-10 md:grid-cols-2 md:gap-14">
+              <Motion.div variants={fadeUp}>
+                <p className="max-w-md leading-relaxed">
+                  Have a project in mind, or just want to talk shop? My inbox is open — I usually reply
+                  faster than the night bus arrives.
+                </p>
+
+                <ul className="mt-8 space-y-4">
+                  {[
+                    { icon: Mail, label: "Email", value: "dev@kijmoshi.xyz", href: "mailto:dev@kijmoshi.xyz" },
+                    {
+                      icon: Github,
+                      label: "GitHub",
+                      value: "github.com/real-kijmoshi",
+                      href: "https://github.com/real-kijmoshi",
+                    },
+                    {
+                      icon: Twitter,
+                      label: "Twitter",
+                      value: "@kijmoshi_dev",
+                      href: "https://twitter.com/kijmoshi_dev",
+                    },
+                  ].map((item) => {
+                    const Icon = item.icon;
+                    return (
+                      <li key={item.label} className="flex items-center gap-4">
+                        <span className="flex h-10 w-10 items-center justify-center border-2 border-ink">
+                          <Icon size={18} />
+                        </span>
+                        <div>
+                          <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-ink-soft">
+                            {item.label}
+                          </p>
+                          <a
+                            href={item.href}
+                            target={item.href.startsWith("mailto") ? undefined : "_blank"}
+                            rel="noopener noreferrer"
+                            className="font-medium underline-offset-4 hover:text-cobalt hover:underline"
+                          >
+                            {item.value}
+                          </a>
+                        </div>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </Motion.div>
+
+              <Motion.form
+                variants={fadeUp}
+                method="POST"
+                action="https://formspree.io/f/xyzjwnog"
+                className="space-y-5"
+              >
+                <div>
+                  <label
+                    htmlFor="name"
+                    className="mb-1.5 block font-mono text-[11px] uppercase tracking-[0.25em] text-ink-soft"
+                  >
+                    Name
+                  </label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    required
+                    placeholder="Your name"
+                    className="w-full border-2 border-ink bg-paper px-4 py-2.5 outline-none transition-colors placeholder:text-ink-soft/50 focus:border-cobalt"
+                  />
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="email"
+                    className="mb-1.5 block font-mono text-[11px] uppercase tracking-[0.25em] text-ink-soft"
+                  >
+                    E-mail
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    required
+                    placeholder="your.email@example.com"
+                    className="w-full border-2 border-ink bg-paper px-4 py-2.5 outline-none transition-colors placeholder:text-ink-soft/50 focus:border-cobalt"
+                  />
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="message"
+                    className="mb-1.5 block font-mono text-[11px] uppercase tracking-[0.25em] text-ink-soft"
+                  >
+                    Message
+                  </label>
+                  <textarea
+                    id="message"
+                    name="message"
+                    rows={5}
+                    required
+                    placeholder="Your message here..."
+                    className="w-full resize-y border-2 border-ink bg-paper px-4 py-2.5 outline-none transition-colors placeholder:text-ink-soft/50 focus:border-cobalt"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  className="w-full border-2 border-ink bg-ink px-6 py-3 font-mono text-xs font-semibold uppercase tracking-widest text-amber transition-colors hover:bg-cobalt hover:text-paper hover:border-cobalt"
+                >
+                  Send message
+                </button>
+              </Motion.form>
+            </div>
+          </Motion.section>
+        </main>
+
+        {/* footer */}
+        <footer className="border-t-2 border-ink">
+          <div className="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-6 font-mono text-[11px] uppercase tracking-[0.2em] text-ink-soft sm:flex-row sm:items-center sm:justify-between sm:px-6">
+            <p>
+              © {year} kijmoshi · built in Wrocław
+            </p>
+            <p>React · Tailwind · Framer Motion — no delays expected</p>
+          </div>
+        </footer>
+      </div>
+    </MotionConfig>
   );
 }
