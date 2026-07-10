@@ -56,6 +56,23 @@ const techStack = [
 
 const projects = [
   {
+    name: "cotozanuta.pl",
+    type: "web",
+    description: "A music quiz game where players guess Otsochodzi song titles based on random lyrics from the songs. Features three game modes: Endless (unlimited songs), Daily (one song per day for all players), and Ranking (60-second challenge). Includes player statistics, daily history tracking, and global leaderboards.",
+    github: "https://github.com/real-kijmoshi/cotozanuta.pl",
+    live: "https://cotsozanuta.pl/",
+    image: "https://raw.githubusercontent.com/real-kijmoshi/portfolio/refs/heads/main/screenshots/cotsozanuta/1.png",
+    images: [
+      "https://raw.githubusercontent.com/real-kijmoshi/portfolio/refs/heads/main/screenshots/cotsozanuta/1.png",
+      "https://raw.githubusercontent.com/real-kijmoshi/portfolio/refs/heads/main/screenshots/cotsozanuta/2.png",
+    ],
+    techStack: [
+      "express.js",
+      "scraped geniuss lyrics",
+    ],
+    challenges: "Integrating with the Otsochodzi lyrics database, implementing real-time leaderboards, managing daily game state across multiple users, and creating an engaging quiz interface with smooth animations. and promoting the game on social media to attract players."
+  },
+  {
     name: "WrocMap",
     type: "mobile",
     description: "A comprehensive public transport tracking system including a React Native mobile app and web interface that provides real-time location data for buses in Wrocław, Poland. Features route planning, delay notifications, and vehicle tracking.",
@@ -116,6 +133,20 @@ const projects = [
     challenges: "Handling real-time multiplayer updates with Socket.IO, ensuring game state synchronization between players, and designing an intuitive UI that works well on both iOS and Android devices."
   },
   {
+    name: "zypher",
+    type: "web",
+    description: "An end-to-end encrypted terminal chat application built for private communications. Features X25519 key exchange, AES-256-GCM message encryption, forward secrecy, group chats, offline message queues, and a self-hosted server option. Includes a ghost mode for complete data deletion.",
+    github: "https://github.com/real-kijmoshi/zypher",
+    image: "https://raw.githubusercontent.com/real-kijmoshi/portfolio/refs/heads/main/screenshots/other/zypher.png",
+    images: [
+      "https://raw.githubusercontent.com/real-kijmoshi/portfolio/refs/heads/main/screenshots/other/zypher.png"
+    ],
+    techStack: [
+      "Node.js",
+      "bcrypt"
+    ]
+  },
+  {
     name: "DreemBook",
     type: "mobile",
     description: "A dream journal application made in React Native that allows users to record, categorize, and analyze their dreams. Features include mood tracking, dream pattern recognition, and a secure private journal with rich text formatting.",
@@ -147,7 +178,7 @@ const projects = [
       "Vercel"
     ],
     challenges: "Creating a visually appealing and responsive design, implementing smooth animations with Framer Motion, and ensuring cross-browser compatibility."
-  }
+  },
 ];
 
 const socialLinks = [
