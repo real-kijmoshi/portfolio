@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='16' fill='%2316130c'/><text x='50' y='72' font-size='60' text-anchor='middle' fill='%23ffb300' font-family='monospace'>K</text></svg>" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="kijmoshi — full-stack developer from Wrocław, Poland. Building live things: transit trackers, music quizzes, encrypted chat." />
+    <meta name="description" content="kijmoshi — full-stack developer from Wrocław, coding since age 9. Building live things: music quizzes, real-time transit maps, encrypted terminal chat." />
     <meta name="keywords" content="portfolio, web development, projects, developer, software engineer, Wrocław" />
     <meta name="author" content="kijmoshi" />
     <meta name="robots" content="index, follow" />
@@ -12,14 +12,14 @@
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://www.kijmoshi.xyz/" />
-    <meta property="og:title" content="kijmoshi — full-stack developer" />
-    <meta property="og:description" content="Full-stack developer from Wrocław, Poland. Building live things: transit trackers, music quizzes, encrypted chat." />
+    <meta property="og:title" content="kijmoshi — full-stack developer · Wrocław" />
+    <meta property="og:description" content="Full-stack developer from Wrocław, coding since age 9. Building live things: music quizzes, real-time transit maps, encrypted terminal chat." />
 
     <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:card" content="summary" />
     <meta property="twitter:url" content="https://www.kijmoshi.xyz/" />
-    <meta property="twitter:title" content="kijmoshi — full-stack developer" />
-    <meta property="twitter:description" content="Full-stack developer from Wrocław, Poland. Building live things: transit trackers, music quizzes, encrypted chat." />
+    <meta property="twitter:title" content="kijmoshi — full-stack developer · Wrocław" />
+    <meta property="twitter:description" content="Full-stack developer from Wrocław, coding since age 9. Building live things: music quizzes, real-time transit maps, encrypted terminal chat." />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -28,7 +28,43 @@
       rel="stylesheet"
     />
 
-    <title>kijmoshi — full-stack developer</title>
+    <title>kijmoshi — full-stack developer · Wrocław</title>
+
+    <meta name="theme-color" content="#f2f2ed" />
+    <script>
+      // set the theme before first paint so night mode never flashes white
+      (function () {
+        try {
+          var stored = localStorage.getItem("theme");
+          var night = stored
+            ? stored === "night"
+            : window.matchMedia("(prefers-color-scheme: dark)").matches;
+          if (night) {
+            document.documentElement.dataset.theme = "night";
+            var meta = document.querySelector('meta[name="theme-color"]');
+            if (meta) meta.setAttribute("content", "#17130b");
+          }
+        } catch (e) {
+          /* localStorage unavailable — default to day */
+        }
+      })();
+    </script>
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "kijmoshi",
+        "url": "https://kijmoshi.xyz/",
+        "email": "mailto:dev@kijmoshi.xyz",
+        "jobTitle": "Full-stack developer",
+        "address": { "@type": "PostalAddress", "addressLocality": "Wrocław", "addressCountry": "PL" },
+        "sameAs": [
+          "https://github.com/real-kijmoshi",
+          "https://twitter.com/kijmoshi_dev"
+        ]
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

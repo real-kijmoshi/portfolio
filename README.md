@@ -1,64 +1,25 @@
-# Personal Portfolio
+# kijmoshi.xyz
 
-![preview](./screenshots/screenshot.png)
+My portfolio, styled as a Polish bus stop: printed timetable, amber departure board, no delays expected.
 
-A modern and interactive portfolio website built with React, Vite.
+**Live at [kijmoshi.xyz](https://kijmoshi.xyz)**
 
-## 🚀 Features
+## Stack
 
-- Modern UI/UX design
-- Smooth animations with Framer Motion
-- Responsive layout with Tailwind CSS
-- Fast and optimized performance with Vite
+React 19 · Vite 6 · Tailwind CSS · Framer Motion
 
-## 🛠️ Technologies Used
+## Run it
 
-- React 19
-- Vite 6
-- Framer Motion
-- Tailwind CSS
-- ESLint for code quality
+```bash
+npm install
+npm run dev      # dev server
+npm run build    # production build → dist/
+npm run preview  # preview the production build
+npm run lint     # eslint
+```
 
-## 📦 Installation
+## Where things live
 
-1. Clone the repository:
-   ```bash
-   git clone [your-repo-url]
-   cd porfolio
-   ```
-
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-
-3. Start the development server:
-   ```bash
-   npm run dev
-   ```
-
-## 🔧 Available Scripts
-
-- `npm run dev` - Starts the development server
-- `npm run build` - Builds the app for production
-- `npm run preview` - Preview the production build locally
-- `npm run lint` - Run ESLint to check code quality
-
-## 🚀 Deployment
-
-To deploy the application:
-
-1. Build the project:
-   ```bash
-   npm run build
-   ```
-
-2. The built files will be in the `dist` directory, ready to be deployed to your hosting platform of choice.
-
-## 🤝 Contributing
-
-Contributions, issues, and feature requests are welcome! Feel free to check the issues page.
-
-## 📝 License
-
-This project is available under the MIT License.
+- `src/App.jsx` — the whole site. All content (projects, tech stack, social links) sits in the data block at the top of the file; components follow below. To add or edit a project, edit the `projects` array — the departure board, route stops, and live-count stat all derive from it.
+- `screenshots/` — project screenshots served to the site via `raw.githubusercontent.com`, so they don't ship with the bundle.
+- `public/` — favicon and the about photo.

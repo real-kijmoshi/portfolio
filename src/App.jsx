@@ -1,22 +1,29 @@
-import { useEffect, useState } from "react";
-import { motion as Motion, MotionConfig } from "framer-motion";
-import { Github, Twitter, Mail, ExternalLink, ArrowDown } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import {
+  motion as Motion,
+  MotionConfig,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+} from "framer-motion";
+import { Github, Twitter, Mail, ExternalLink, ArrowDown, Sun, Moon } from "lucide-react";
 
 /* ---------------------------------- data --------------------------------- */
 
 const projects = [
   {
-    slug: "cotozanuta",
-    name: "cotozanuta.pl",
-    board: "COTOZANUTA.PL",
+    slug: "cotsozanuta",
+    name: "cotsozanuta.pl",
+    board: "COTSOZANUTA.PL",
     type: "web",
     typeTag: "WWW",
     status: "LIVE",
+    created: "2026-05",
     description:
-      "A music quiz where you guess Otsochodzi songs from random lyrics. Endless, daily and 60-second ranked modes, with player stats and global leaderboards.",
+      "A music quiz where you guess songs by the Polish rapper Otsochodzi from random lyric fragments. Endless, daily, and 60-second ranked modes, with player stats and global leaderboards.",
     hardPart:
-      "Scraping and cleaning Genius lyrics, one shared daily game state for every player, and convincing social media to care.",
-    github: "https://github.com/real-kijmoshi/cotozanuta.pl",
+      "Scraping and cleaning Genius lyrics, keeping one shared daily puzzle in sync for every player, and convincing social media to care.",
+    github: "https://github.com/real-kijmoshi/cotsozanuta",
     live: "https://cotsozanuta.pl/",
     images: [
       "https://raw.githubusercontent.com/real-kijmoshi/portfolio/refs/heads/main/screenshots/cotsozanuta/1.png",
@@ -31,6 +38,7 @@ const projects = [
     type: "mobile",
     typeTag: "APP",
     status: "LIVE",
+    created: "2025-06",
     description:
       "Real-time tracker for Wrocław's public transport — a React Native app plus a web map with live vehicle positions, routes, and delay notifications.",
     hardPart:
@@ -45,16 +53,35 @@ const projects = [
     techStack: ["React Native", "Expo", "Express.js", "Twitter API", "Wrocław MPK API (sadly)"],
   },
   {
+    slug: "zypher",
+    name: "zypher",
+    board: "ZYPHER",
+    type: "web",
+    typeTag: "TTY",
+    status: "LIVE",
+    created: "2026-03",
+    description:
+      "End-to-end encrypted chat that lives in your terminal and trusts no server — including mine. Forward secrecy, group chats, offline message queues, self-hosting, and a ghost mode that deletes everything on the way out.",
+    hardPart:
+      "Getting forward secrecy actually right, so yesterday's messages stay sealed even if today's keys leak.",
+    github: "https://github.com/real-kijmoshi/zypher",
+    live: "https://zypher.kijmoshi.xyz",
+    images: [
+      "https://raw.githubusercontent.com/real-kijmoshi/portfolio/refs/heads/main/screenshots/other/zypher.png",
+    ],
+    techStack: ["Node.js", "X25519", "AES-256-GCM", "bcrypt"],
+  },
+  {
     slug: "discord-wrapped",
     name: "discord-wrapped",
     board: "DISCORD-WRAPPED",
     type: "web",
     typeTag: "WWW",
     status: "LIVE",
+    created: "2025-12",
     description:
-      "Spotify Wrapped, but for your Discord life. Upload your data export and get a shareable yearly recap of your messages, servers, and habits.",
-    hardPart:
-      "Parsing Discord exports up to 3 GB in the browser, without ever sending anyone's messages to a server.",
+      "Spotify Wrapped, but for your Discord life. Drop in your data export, get a shareable yearly recap of your messages, servers, and habits — and nothing ever leaves your browser.",
+    hardPart: "Parsing multi-gigabyte exports entirely client-side without freezing the tab.",
     github: "https://github.com/real-kijmoshi/discord-wrapped",
     live: "https://discordwrapped.netlify.app/",
     images: [
@@ -65,50 +92,15 @@ const projects = [
     techStack: ["React"],
   },
   {
-    slug: "tic-tac-toe",
-    name: "Tic Tac Toe Multiplayer",
-    board: "TIC-TAC-TOE",
-    type: "mobile",
-    typeTag: "APP",
-    status: "REPO",
-    description:
-      "Real-time multiplayer Tic Tac Toe for iOS and Android, with game rooms and live updates over WebSockets.",
-    hardPart: "Keeping game state perfectly in sync between two phones over Socket.IO.",
-    github: "https://github.com/real-kijmoshi/tic-tac-toe-react-native",
-    images: [
-      "https://raw.githubusercontent.com/real-kijmoshi/tic-tac-toe-react-native/main/screenshots/1.PNG",
-      "https://raw.githubusercontent.com/real-kijmoshi/tic-tac-toe-react-native/main/screenshots/2.PNG",
-      "https://raw.githubusercontent.com/real-kijmoshi/tic-tac-toe-react-native/main/screenshots/3.PNG",
-      "https://raw.githubusercontent.com/real-kijmoshi/tic-tac-toe-react-native/main/screenshots/4.PNG",
-    ],
-    techStack: ["React Native", "Expo", "Socket.IO", "Node.js", "Express.js"],
-  },
-  {
-    slug: "zypher",
-    name: "zypher",
-    board: "ZYPHER",
-    type: "web",
-    typeTag: "TTY",
-    status: "LIVE",
-    description:
-      "End-to-end encrypted chat that lives in your terminal. X25519 key exchange, AES-256-GCM, forward secrecy, group chats, offline queues, self-hosting — and a ghost mode that deletes everything.",
-    hardPart: "Getting forward secrecy right, and trusting no server — including my own.",
-    github: "https://github.com/real-kijmoshi/zypher",
-    live: "https://zypher.kijmoshi.xyz",
-    images: [
-      "https://raw.githubusercontent.com/real-kijmoshi/portfolio/refs/heads/main/screenshots/other/zypher.png",
-    ],
-    techStack: ["Node.js", "X25519", "AES-256-GCM", "bcrypt"],
-  },
-  {
     slug: "dreembook",
     name: "DreemBook",
     board: "DREEMBOOK",
     type: "mobile",
     typeTag: "APP",
     status: "REPO",
+    created: "2025-04",
     description:
-      "A dream journal in your pocket — record, tag, and analyze dreams, track moods, and spot patterns over time.",
+      "A dream journal in your pocket — catch dreams before they evaporate, tag and analyze them, track moods, and spot patterns over time.",
     hardPart: "Building a rich text editor with custom formatting from scratch in React Native.",
     github: "https://github.com/real-kijmoshi/dream-book",
     images: [
@@ -119,14 +111,35 @@ const projects = [
     techStack: ["React Native", "Expo"],
   },
   {
+    slug: "tic-tac-toe",
+    name: "Tic Tac Toe Multiplayer",
+    board: "TIC-TAC-TOE",
+    type: "mobile",
+    typeTag: "APP",
+    status: "REPO",
+    created: "2025-06",
+    description:
+      "The obligatory tic-tac-toe, done properly: real-time multiplayer for iOS and Android, with game rooms and live moves over WebSockets. Everyone builds one — mine lets you lose to a friend in real time.",
+    hardPart: "Two phones, one board: keeping game state perfectly in sync over Socket.IO.",
+    github: "https://github.com/real-kijmoshi/tic-tac-toe-react-native",
+    images: [
+      "https://raw.githubusercontent.com/real-kijmoshi/tic-tac-toe-react-native/main/screenshots/1.PNG",
+      "https://raw.githubusercontent.com/real-kijmoshi/tic-tac-toe-react-native/main/screenshots/2.PNG",
+      "https://raw.githubusercontent.com/real-kijmoshi/tic-tac-toe-react-native/main/screenshots/3.PNG",
+      "https://raw.githubusercontent.com/real-kijmoshi/tic-tac-toe-react-native/main/screenshots/4.PNG",
+    ],
+    techStack: ["React Native", "Expo", "Socket.IO", "Node.js", "Express.js"],
+  },
+  {
     slug: "portfolio",
     name: "portfolio",
     board: "PORTFOLIO",
     type: "here",
     typeTag: "WWW",
     status: "HERE",
+    created: "2025-06",
     description:
-      "This site. A Polish bus stop for my projects: printed timetable, amber departure board, no delays expected.",
+      "This site. A Polish bus stop for my projects: printed timetable, amber departure board, scanlines and all.",
     hardPart: "Resisting the urge to redesign it every month. (Ongoing.)",
     github: "https://github.com/real-kijmoshi/portfolio",
     live: "https://kijmoshi.xyz",
@@ -135,11 +148,13 @@ const projects = [
   },
 ];
 
+const liveProjectCount = projects.filter((project) => project.status === "LIVE").length;
+
 const stackGroups = [
-  { en: "FRONTEND", items: ["JavaScript", "TypeScript", "React", "Next.js", "Tailwind CSS"] },
-  { en: "BACKEND", items: ["Node.js", "Express", "MongoDB", "PostgreSQL"] },
-  { en: "MOBILE", items: ["React Native", "Expo"] },
-  { en: "TOOLS", items: ["Git", "Docker"] },
+  { label: "FRONTEND", items: ["JavaScript", "TypeScript", "React", "Next.js", "Tailwind CSS"] },
+  { label: "BACKEND", items: ["Node.js", "Express", "MongoDB", "PostgreSQL"] },
+  { label: "MOBILE", items: ["React Native", "Expo"] },
+  { label: "TOOLS", items: ["Git", "Docker"] },
 ];
 
 const socialLinks = [
@@ -147,6 +162,15 @@ const socialLinks = [
   { name: "Twitter", url: "https://twitter.com/kijmoshi_dev", icon: Twitter },
   { name: "Email", url: "mailto:dev@kijmoshi.xyz", icon: Mail },
 ];
+
+const navSections = [
+  ["projects", "Projects"],
+  ["stack", "Stack"],
+  ["about", "About"],
+  ["contact", "Contact"],
+];
+
+const themeColors = { day: "#f2f2ed", night: "#17130b" };
 
 /* --------------------------------- motion -------------------------------- */
 
@@ -174,6 +198,14 @@ function scrollToId(id) {
   el.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
 }
 
+function formatBoardedDate(yearMonth) {
+  const [year, month] = yearMonth.split("-").map(Number);
+  const formatted = new Intl.DateTimeFormat("en-GB", { month: "short", year: "numeric" }).format(
+    new Date(year, month - 1)
+  );
+  return formatted.toUpperCase();
+}
+
 function getWarsawTime() {
   const formatted = new Intl.DateTimeFormat("en-GB", {
     hour: "2-digit",
@@ -194,14 +226,80 @@ function useWarsawTime() {
   return time;
 }
 
+function useTheme() {
+  // the inline script in index.html has already set data-theme before first paint
+  const [theme, setTheme] = useState(() =>
+    document.documentElement.dataset.theme === "night" ? "night" : "day"
+  );
+
+  useEffect(() => {
+    const root = document.documentElement;
+    if (theme === "night") root.dataset.theme = "night";
+    else delete root.dataset.theme;
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute("content", themeColors[theme]);
+  }, [theme]);
+
+  // follow system changes, but only until the user picks a side
+  useEffect(() => {
+    const query = window.matchMedia("(prefers-color-scheme: dark)");
+    const onChange = (event) => {
+      let stored = null;
+      try {
+        stored = localStorage.getItem("theme");
+      } catch {
+        /* localStorage unavailable */
+      }
+      if (!stored) setTheme(event.matches ? "night" : "day");
+    };
+    query.addEventListener("change", onChange);
+    return () => query.removeEventListener("change", onChange);
+  }, []);
+
+  const toggleTheme = () => {
+    setTheme((current) => {
+      const next = current === "night" ? "day" : "night";
+      try {
+        localStorage.setItem("theme", next);
+      } catch {
+        /* localStorage unavailable */
+      }
+      return next;
+    });
+  };
+
+  return { theme, toggleTheme };
+}
+
+function useActiveSection() {
+  const [active, setActive] = useState("");
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) setActive(entry.target.id);
+        });
+      },
+      // a section is "current" while it crosses the middle band of the viewport
+      { rootMargin: "-35% 0px -60% 0px" }
+    );
+    navSections.forEach(([id]) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+    return () => observer.disconnect();
+  }, []);
+  return active;
+}
+
 /* ------------------------------- components ------------------------------ */
 
-function SectionHeader({ en, title }) {
+function SectionHeader({ eyebrow, title }) {
   return (
     <Motion.div variants={fadeUp} className="mb-10">
       <div className="flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.25em] text-ink-soft">
         <span className="h-2.5 w-2.5 border border-ink bg-amber" aria-hidden="true" />
-        <span>{en}</span>
+        <span>{eyebrow}</span>
         <span className="h-px flex-1 bg-rule" aria-hidden="true" />
       </div>
       <h2 className="mt-3 font-stretch-expanded text-4xl font-black uppercase tracking-tight md:text-5xl">
@@ -213,7 +311,7 @@ function SectionHeader({ en, title }) {
 
 function StatusBadge({ status }) {
   const styles = {
-    LIVE: "bg-amber text-ink",
+    LIVE: "bg-amber text-on-amber",
     REPO: "bg-transparent text-ink",
     HERE: "bg-cobalt text-paper",
   };
@@ -226,13 +324,13 @@ function StatusBadge({ status }) {
   );
 }
 
-function DepartureBoard() {
+function DepartureBoard({ night }) {
   const { hh, mm } = useWarsawTime();
 
   return (
     <Motion.div
       variants={fadeUp}
-      className="relative overflow-hidden rounded-lg border-4 border-ink bg-board shadow-[8px_8px_0_0_var(--color-ink)]"
+      className="night-halo relative overflow-hidden rounded-lg border-4 border-ink bg-board shadow-[8px_8px_0_0_var(--color-ink)]"
     >
       <div className="relative p-4 sm:p-5">
         {/* header */}
@@ -284,8 +382,8 @@ function DepartureBoard() {
           <div className="animate-marquee flex w-max whitespace-nowrap font-led text-xs tracking-widest text-amber/70">
             {[0, 1].map((n) => (
               <span key={n} className="pr-4">
-                WELCOME · ALL PROJECTS DEPART ON TIME · BUILT IN WROCŁAW · NEXT DEPARTURE: IN
-                DEVELOPMENT ·&nbsp;
+                {night ? "NIGHT SERVICE" : "WELCOME"} · ALL PROJECTS DEPART ON TIME · TICKETS NOT
+                REQUIRED · BUILT IN WROCŁAW · NEXT DEPARTURE: IN DEVELOPMENT ·&nbsp;
               </span>
             ))}
           </div>
@@ -389,6 +487,14 @@ function ProjectStop({ project, index }) {
         </h3>
         <span className="font-mono text-xs tracking-[0.25em] text-ink-soft">{project.typeTag}</span>
         <StatusBadge status={project.status} />
+        {project.created && (
+          <span
+            className="ml-auto font-mono text-[11px] uppercase tracking-[0.2em] text-ink-soft"
+            title="Boarded"
+          >
+            Boarded {formatBoardedDate(project.created)}
+          </span>
+        )}
       </div>
 
       <div className="grid items-start gap-8 md:grid-cols-2 md:gap-10">
@@ -432,7 +538,7 @@ function ProjectStop({ project, index }) {
                 href={project.live}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 border-2 border-ink px-4 py-2 font-mono text-xs font-semibold uppercase tracking-widest text-ink transition-colors hover:bg-amber"
+                className="flex items-center gap-2 border-2 border-ink px-4 py-2 font-mono text-xs font-semibold uppercase tracking-widest text-ink transition-colors hover:bg-amber hover:text-on-amber"
               >
                 <ExternalLink size={15} />
                 Live
@@ -458,10 +564,30 @@ function TicketStat({ big, label }) {
 
 export default function App() {
   const year = new Date().getFullYear();
+  const { theme, toggleTheme } = useTheme();
+  const activeSection = useActiveSection();
+  const reduceMotion = useReducedMotion();
+
+  // the "bus" that rides the route line as you scroll through projects
+  const routeRef = useRef(null);
+  const { scrollYProgress: routeProgress } = useScroll({
+    target: routeRef,
+    offset: ["start 0.45", "end 0.75"],
+  });
+  const busTop = useTransform(routeProgress, (v) => `${v * 100}%`);
+
+  const night = theme === "night";
 
   return (
     <MotionConfig reducedMotion="user">
       <div className="min-h-screen bg-paper font-sans text-ink">
+        <a
+          href="#projects"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:border-2 focus:border-ink focus:bg-paper focus:px-4 focus:py-2 focus:font-mono focus:text-xs focus:uppercase focus:tracking-[0.2em]"
+        >
+          Skip to projects
+        </a>
+
         {/* top bar */}
         <header className="sticky top-0 z-50 border-b-2 border-ink bg-paper/90 backdrop-blur">
           <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6">
@@ -471,18 +597,32 @@ export default function App() {
                 kijmoshi.xyz
               </span>
             </a>
-            <nav className="hidden gap-6 font-mono text-xs uppercase tracking-[0.2em] sm:flex">
-              {[
-                ["projects", "Projects"],
-                ["stack", "Stack"],
-                ["about", "About"],
-                ["contact", "Contact"],
-              ].map(([id, label]) => (
-                <a key={id} href={`#${id}`} className="text-ink-soft transition-colors hover:text-cobalt">
-                  {label}
-                </a>
-              ))}
-            </nav>
+            <div className="flex items-center gap-4 sm:gap-6">
+              <nav className="hidden gap-6 font-mono text-xs uppercase tracking-[0.2em] sm:flex">
+                {navSections.map(([id, label]) => (
+                  <a
+                    key={id}
+                    href={`#${id}`}
+                    aria-current={activeSection === id ? "true" : undefined}
+                    className={`transition-colors hover:text-cobalt ${
+                      activeSection === id ? "text-cobalt" : "text-ink-soft"
+                    }`}
+                  >
+                    {label}
+                  </a>
+                ))}
+              </nav>
+              <button
+                type="button"
+                onClick={toggleTheme}
+                aria-label={night ? "Switch to day service" : "Switch to night service"}
+                title={night ? "Switch to day service" : "Switch to night service"}
+                className="flex items-center gap-2 border-2 border-ink px-2.5 py-1.5 font-mono text-[11px] font-semibold uppercase tracking-[0.2em] transition-colors hover:bg-amber hover:text-on-amber"
+              >
+                {night ? <Moon size={13} /> : <Sun size={13} />}
+                <span className="hidden md:inline">{night ? "Night" : "Day"}</span>
+              </button>
+            </div>
           </div>
         </header>
 
@@ -511,20 +651,19 @@ export default function App() {
             <div className="mt-10 grid items-start gap-10 lg:grid-cols-[1.1fr_1fr] lg:gap-14">
               <div>
                 <Motion.p variants={fadeUp} className="max-w-xl text-lg font-medium">
-                  Full-stack developer. Building live things with JavaScript since age 9.
+                  Full-stack developer. Building live things in JavaScript since age 9.
                 </Motion.p>
 
                 <Motion.p variants={fadeUp} className="mt-4 max-w-xl leading-relaxed text-ink-soft">
-                  Transit trackers, music quizzes, encrypted terminal chat — I like software that's
-                  moving while you look at it. Currently arguing with Apple about whether I'm old enough
-                  for the App Store. When I'm not shipping, I'm bouldering.
+                  Music quizzes, transit trackers, encrypted terminal chat — I like software that's
+                  moving while you look at it. When I'm not shipping, I'm bouldering.
                 </Motion.p>
 
                 <Motion.div variants={fadeUp} className="mt-8 flex flex-wrap items-center gap-4">
                   <button
                     type="button"
                     onClick={() => scrollToId("projects")}
-                    className="flex items-center gap-2 border-2 border-ink bg-ink px-5 py-2.5 font-mono text-xs font-semibold uppercase tracking-widest text-amber transition-colors hover:bg-cobalt hover:text-paper hover:border-cobalt"
+                    className="flex items-center gap-2 border-2 border-ink bg-ink px-5 py-2.5 font-mono text-xs font-semibold uppercase tracking-widest text-on-ink transition-colors hover:bg-cobalt hover:text-paper hover:border-cobalt"
                   >
                     <ArrowDown size={15} />
                     View route
@@ -550,7 +689,7 @@ export default function App() {
                 </Motion.div>
               </div>
 
-              <DepartureBoard />
+              <DepartureBoard night={night} />
             </div>
           </Motion.section>
 
@@ -563,9 +702,25 @@ export default function App() {
             variants={stagger}
             className="scroll-mt-24 border-t-2 border-ink py-16 md:py-20"
           >
-            <SectionHeader en="Route" title="Projects" />
+            <SectionHeader eyebrow="Route" title="Projects" />
 
-            <ol className="relative ml-2 border-l-2 border-ink sm:ml-4">
+            <ol ref={routeRef} className="relative ml-2 border-l-2 border-ink sm:ml-4">
+              {!reduceMotion && (
+                <>
+                  {/* travelled part of the route */}
+                  <Motion.span
+                    aria-hidden="true"
+                    style={{ scaleY: routeProgress }}
+                    className="absolute inset-y-0 -left-[2px] w-[2px] origin-top bg-amber"
+                  />
+                  {/* the bus */}
+                  <Motion.span
+                    aria-hidden="true"
+                    style={{ top: busTop }}
+                    className="absolute left-0 z-10 h-3.5 w-3.5 -translate-x-[6px] -translate-y-1/2 border-2 border-ink bg-cobalt"
+                  />
+                </>
+              )}
               {projects.map((project, index) => (
                 <ProjectStop key={project.slug} project={project} index={index} />
               ))}
@@ -581,17 +736,17 @@ export default function App() {
             variants={stagger}
             className="scroll-mt-24 border-t-2 border-ink py-16 md:py-20"
           >
-            <SectionHeader en="Fleet" title="Tech stack" />
+            <SectionHeader eyebrow="Fleet" title="Tech stack" />
 
             <div className="border-t border-rule">
               {stackGroups.map((group) => (
                 <Motion.div
-                  key={group.en}
+                  key={group.label}
                   variants={fadeUp}
                   className="flex flex-col gap-3 border-b border-rule py-5 sm:flex-row sm:items-baseline"
                 >
                   <p className="w-44 shrink-0 font-mono text-[11px] uppercase tracking-[0.25em] text-ink-soft">
-                    {group.en}
+                    {group.label}
                   </p>
                   <div className="flex flex-wrap gap-x-6 gap-y-2">
                     {group.items.map((item) => (
@@ -614,15 +769,20 @@ export default function App() {
             variants={stagger}
             className="scroll-mt-24 border-t-2 border-ink py-16 md:py-20"
           >
-            <SectionHeader en="Driver" title="About me" />
+            <SectionHeader eyebrow="Driver" title="About me" />
 
             <div className="grid gap-10 md:grid-cols-[auto_1fr] md:gap-14">
               <Motion.div variants={fadeUp} className="mx-auto md:mx-0">
                 <div className="w-52 overflow-hidden border-2 border-ink shadow-[6px_6px_0_0_var(--color-amber)] sm:w-60">
-                  <img src="/image.jpg" alt="kijmoshi" className="aspect-square w-full object-cover" loading="lazy" />
+                  <img
+                    src="/image.jpg"
+                    alt="kijmoshi — mirror selfie in a tram door window"
+                    className="aspect-square w-full object-cover"
+                    loading="lazy"
+                  />
                 </div>
                 <p className="mt-3 text-center font-mono text-[11px] uppercase tracking-[0.25em] text-ink-soft md:text-left">
-                  kijmoshi · full-stack
+                  Driver ID · kijmoshi · full-stack
                 </p>
               </Motion.div>
 
@@ -639,9 +799,9 @@ export default function App() {
                 </p>
 
                 <div className="mt-8 flex flex-wrap gap-4">
-                  <TicketStat big="8 years" label="coding" />
-                  <TicketStat big="Age 9" label="first line of code" />
-                  <TicketStat big="10+" label="projects shipped" />
+                  <TicketStat big="10+" label="projects on the road" />
+                  <TicketStat big={`${liveProjectCount} live`} label="right now" />
+                  <TicketStat big="1 city" label="tracked in real time" />
                 </div>
               </Motion.div>
             </div>
@@ -656,13 +816,13 @@ export default function App() {
             variants={stagger}
             className="scroll-mt-24 border-t-2 border-ink py-16 md:py-20"
           >
-            <SectionHeader en="Contact" title="Get in touch" />
+            <SectionHeader eyebrow="Terminus" title="Get in touch" />
 
             <div className="grid gap-10 md:grid-cols-2 md:gap-14">
               <Motion.div variants={fadeUp}>
                 <p className="max-w-md leading-relaxed">
-                  Have a project in mind, or just want to talk shop? My inbox is open — I usually reply
-                  faster than the night bus arrives.
+                  Project ideas, job offers, bug reports, or just talking shop — my inbox is open,
+                  and I usually reply faster than the night bus arrives.
                 </p>
 
                 <ul className="mt-8 space-y-4">
@@ -724,7 +884,7 @@ export default function App() {
                     id="name"
                     name="name"
                     required
-                    placeholder="Your name"
+                    placeholder="Jan Kowalski"
                     className="w-full border-2 border-ink bg-paper px-4 py-2.5 outline-none transition-colors placeholder:text-ink-soft/50 focus:border-cobalt"
                   />
                 </div>
@@ -734,14 +894,14 @@ export default function App() {
                     htmlFor="email"
                     className="mb-1.5 block font-mono text-[11px] uppercase tracking-[0.25em] text-ink-soft"
                   >
-                    E-mail
+                    Email
                   </label>
                   <input
                     type="email"
                     id="email"
                     name="email"
                     required
-                    placeholder="your.email@example.com"
+                    placeholder="you@example.com"
                     className="w-full border-2 border-ink bg-paper px-4 py-2.5 outline-none transition-colors placeholder:text-ink-soft/50 focus:border-cobalt"
                   />
                 </div>
@@ -758,14 +918,14 @@ export default function App() {
                     name="message"
                     rows={5}
                     required
-                    placeholder="Your message here..."
+                    placeholder="What are we building?"
                     className="w-full resize-y border-2 border-ink bg-paper px-4 py-2.5 outline-none transition-colors placeholder:text-ink-soft/50 focus:border-cobalt"
                   />
                 </div>
 
                 <button
                   type="submit"
-                  className="w-full border-2 border-ink bg-ink px-6 py-3 font-mono text-xs font-semibold uppercase tracking-widest text-amber transition-colors hover:bg-cobalt hover:text-paper hover:border-cobalt"
+                  className="w-full border-2 border-ink bg-ink px-6 py-3 font-mono text-xs font-semibold uppercase tracking-widest text-on-ink transition-colors hover:bg-cobalt hover:text-paper hover:border-cobalt"
                 >
                   Send message
                 </button>

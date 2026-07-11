@@ -10,10 +10,34 @@
   --color-amber: #ffb300;
   --color-board: #16130c;
   --color-board-edge: #2b2517;
+  /* text/icons sitting on a bg-ink fill (flips with the theme) */
+  --color-on-ink: #ffb300;
+  /* text/icons sitting on a bg-amber fill (always dark, in both themes) */
+  --color-on-amber: #1a1c21;
 
   --font-sans: "Archivo", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
   --font-led: "DotGothic16", "IBM Plex Mono", monospace;
+}
+
+/* night service — same stop, lights on */
+[data-theme="night"] {
+  --color-paper: #17130b;
+  --color-panel: #211c11;
+  --color-ink: #f0e7d5;
+  --color-ink-soft: #a89e88;
+  --color-rule: #3a3424;
+  --color-cobalt: #7d9bff;
+  --color-board: #0c0a05;
+  --color-on-ink: #17130b;
+}
+
+:root {
+  color-scheme: light;
+}
+
+[data-theme="night"] {
+  color-scheme: dark;
 }
 
 html {
@@ -27,7 +51,15 @@ body {
 
 ::selection {
   background-color: var(--color-amber);
-  color: var(--color-ink);
+  color: var(--color-on-amber);
+}
+
+/* streetlamp halo around the departure board at night
+   (box-shadow, not filter — a filter would re-rasterize the animated board every frame) */
+[data-theme="night"] .night-halo {
+  box-shadow:
+    8px 8px 0 0 var(--color-ink),
+    0 0 32px 4px rgba(255, 179, 0, 0.14);
 }
 
 :focus-visible {
